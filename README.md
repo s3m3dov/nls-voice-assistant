@@ -384,16 +384,8 @@ The final evaluation report (max 2 pages + title sheet) will include:
 - Project API Documentation: https://api.responsible-nlp.net/
 - GitHub Repository: https://github.com/s3m3dov/nls-voice-assistant
 
-## License
-
-[Specify license if applicable]
-
 ## Contact
 
 For questions regarding the project, contact:
 - Course Instructor: Daniel Braun
 - Teaching Assistant: Lucas Fonseca Lage
-
----
-
-**Last Updated**: November 2025
