@@ -34,15 +34,7 @@ This project implements a local voice assistant capable of providing weather inf
 - **Response**: 7-day forecast including current day with temperature ranges and weather conditions
 
 **Available Weather Conditions**:
-- clear sky
-- few clouds
-- scattered clouds
-- broken clouds
-- shower rain
-- rain
-- thunderstorm
-- snow
-- mist
+clear sky, few clouds, scattered clouds, broken clouds, shower rain, rain, thunderstorm, snow, mist
 
 #### Calendar API
 - **Endpoint**: `https://api.responsible-nlp.net/calendar.php`
