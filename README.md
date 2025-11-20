@@ -32,7 +32,15 @@ This project implements a local voice assistant capable of providing weather inf
 - **Response**: 7-day forecast including current day with temperature ranges and weather conditions
 
 **Available Weather Conditions**:
-clear sky, few clouds, scattered clouds, broken clouds, shower rain, rain, thunderstorm, snow, mist
+- clear sky
+- few clouds
+- scattered clouds
+- broken clouds
+- shower rain
+- rain
+- thunderstorm
+- snow
+- mist
 
 #### Calendar API
 - **Endpoint**: `https://api.responsible-nlp.net/calendar.php`
@@ -94,7 +102,64 @@ The system must handle commands such as:
 
 Choose one of the following package managers based on your preference:
 
-#### Option 1: Using Poetry (Recommended)
+#### Option 1: Using UV (Fastest & Recommended)
+
+**Install UV**
+
+<details>
+<summary>macOS</summary>
+
+**Via Homebrew (Recommended):**
+```bash
+brew install uv
+```
+
+**Via Official Installer:**
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+</details>
+
+<details>
+<summary>Linux</summary>
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+</details>
+
+<details>
+<summary>Windows (PowerShell)</summary>
+
+```powershell
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+</details>
+
+**Setup Project**
+
+```bash
+# Clone the repository
+git clone https://github.com/s3m3dov/nls-voice-assistant.git
+cd nls-voice-assistant
+
+# Create virtual environment and install dependencies
+uv venv
+uv pip install -r requirements.txt
+
+# Activate the virtual environment
+# macOS/Linux:
+source .venv/bin/activate
+# Windows (Command Prompt):
+.venv\Scripts\activate.bat
+# Windows (PowerShell):
+.venv\Scripts\Activate.ps1
+
+# Run the application
+python src/main.py
+```
+
+#### Option 2: Using Poetry
 
 **Install Poetry**
 
@@ -155,63 +220,6 @@ poetry shell
 
 # Run the application
 poetry run python src/main.py
-```
-
-#### Option 2: Using UV (Fastest)
-
-**Install UV**
-
-<details>
-<summary>macOS</summary>
-
-**Via Homebrew (Recommended):**
-```bash
-brew install uv
-```
-
-**Via Official Installer:**
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-</details>
-
-<details>
-<summary>Linux</summary>
-
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-</details>
-
-<details>
-<summary>Windows (PowerShell)</summary>
-
-```powershell
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
-</details>
-
-**Setup Project**
-
-```bash
-# Clone the repository
-git clone https://github.com/s3m3dov/nls-voice-assistant.git
-cd nls-voice-assistant
-
-# Create virtual environment and install dependencies
-uv venv
-uv pip install -r requirements.txt
-
-# Activate the virtual environment
-# macOS/Linux:
-source .venv/bin/activate
-# Windows (Command Prompt):
-.venv\Scripts\activate.bat
-# Windows (PowerShell):
-.venv\Scripts\Activate.ps1
-
-# Run the application
-python src/main.py
 ```
 
 #### Option 3: Using venv (Built-in)
@@ -385,3 +393,7 @@ The final evaluation report (max 2 pages + title sheet) will include:
 For questions regarding the project, contact:
 - Course Instructor: Daniel Braun
 - Teaching Assistant: Lucas Fonseca Lage
+
+---
+
+**Last Updated**: November 2025
