@@ -12,8 +12,6 @@ This project implements a local voice assistant capable of providing weather inf
 - **Yelizaveta Utenko** - [@utenk0](https://github.com/utenk0)
 - **Ali Amrahli** - [@aliamrahli](https://github.com/aliamrahli)
 
----
-
 ## Project Requirements
 
 ### Core Functionality
