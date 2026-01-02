@@ -9,6 +9,10 @@ __pycache__/
 # C extensions
 *.so
 
+# Large TTS models
+src/tts/*.onnx
+src/tts/*.bin
+
 # Distribution / packaging
 .Python
 build/
