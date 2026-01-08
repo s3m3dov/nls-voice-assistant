@@ -157,4 +157,4 @@ Icon
 # Project specific
 #-------------------------------
 # Add any project-specific ignores here
-data/
+**/data/
