@@ -24,6 +24,10 @@ dependencies = [
     "kokoro-onnx>=0.4.9",
     "misaki>=0.9.4",
 
+    # --- Plotting ---
+    "matplotlib>=3.8.4,<4.0",
+    "seaborn>=0.13.2,<0.14",
+
     # --- Data / notebooks ---
     "pandas>=2.1,<2.4",
     "pandas-stubs>=2.1,<2.4",
