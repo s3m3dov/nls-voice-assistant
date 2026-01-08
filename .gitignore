@@ -103,6 +103,7 @@ pip-selfcheck.json
 poetry.lock
 Pipfile.lock
 .pdm.toml
+uv.lock
 
 # Other Python tools
 .pytype/
@@ -156,3 +157,4 @@ Icon
 # Project specific
 #-------------------------------
 # Add any project-specific ignores here
+data/
