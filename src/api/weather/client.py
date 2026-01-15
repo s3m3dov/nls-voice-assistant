@@ -3,9 +3,8 @@ from typing import Optional
 import requests
 
 from src.api.config import APISettings
-from .schema import DayForecastResponse, WeatherResponse
-
 from .exception import WeatherAPIError
+from .schema import DayForecastResponse, WeatherResponse
 
 
 class WeatherClient:
