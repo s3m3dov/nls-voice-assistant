@@ -2,7 +2,9 @@
 
 ## Project Overview
 
-This project implements a local voice assistant capable of providing weather information and managing calendar entries through spoken English input and output. The system processes all requests locally without relying on cloud-based models.
+This project implements a local voice assistant capable of providing weather information and managing calendar entries
+through spoken English input and output. The system processes all requests locally without relying on cloud-based
+models.
 
 ## Team Members
 
@@ -47,12 +49,13 @@ This project implements a local voice assistant capable of providing weather inf
 #### Calendar API
 
 - **Endpoint**: `https://api.responsible-nlp.net/calendar.php?calenderid=xxx`
-- **Important**: Replace `xxx` with a unique ID for your team. This ensures that teams do not interfere with each other's data.
+- **Important**: Replace `xxx` with a unique ID for your team. This ensures that teams do not interfere with each
+  other's data.
 - **Operations**:
-  - **CREATE** (POST): Add new calendar entries
-  - **READ** (GET): List all entries or get a specific entry by ID
-  - **UPDATE** (PUT): Modify existing entries
-  - **DELETE** (DELETE): Remove entries
+    - **CREATE** (POST): Add new calendar entries
+    - **READ** (GET): List all entries or get a specific entry by ID
+    - **UPDATE** (PUT): Modify existing entries
+    - **DELETE** (DELETE): Remove entries
 
 ### Example Commands
 
@@ -68,12 +71,12 @@ The system must handle commands such as:
 
 ## Project Milestones
 
-| Milestone | Description | Deadline |
-|-----------|-------------|----------|
-| **MS1** | Working ASR and TTS implementation | 14.11.2025 |
-| **MS2** | Weather and Calendar API integration | 28.11.2025 |
-| **MS3** | Functional voice assistant | 12.12.2025 |
-| **MS4** | Final Docker container + evaluation report | 30.01.2025 |
+| Milestone | Description                                | Deadline   |
+|-----------|--------------------------------------------|------------|
+| **MS1**   | Working ASR and TTS implementation         | 14.11.2025 |
+| **MS2**   | Weather and Calendar API integration       | 28.11.2025 |
+| **MS3**   | Functional voice assistant                 | 12.12.2025 |
+| **MS4**   | Final Docker container + evaluation report | 30.01.2025 |
 
 ## Project Structure
 
