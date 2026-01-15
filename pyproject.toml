@@ -24,6 +24,13 @@ dependencies = [
     "kokoro-onnx>=0.4.9",
     "misaki>=0.9.4",
 
+    # --- Config / Validation ---
+    "pydantic>=2.0,<3.0",
+    "pydantic-settings>=2.0,<3.0",
+
+    # --- HTTP ---
+    "requests>=2.31,<3.0",
+
     # --- Plotting ---
     "matplotlib>=3.8.4,<4.0",
     "seaborn>=0.13.2,<0.14",
@@ -38,4 +45,6 @@ dependencies = [
 dev = [
     "mypy>=1.8,<2.0",
     "ruff>=0.4,<1.0",
+    "pytest>=8.0,<9.0",
+    "pytest-mock>=3.12,<4.0",
 ]
