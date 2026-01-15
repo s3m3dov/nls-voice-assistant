@@ -1,4 +1,4 @@
-# Natural Language Systems - Voice Assistant Project
+# Natural Language Systems – Voice Assistant Project
 
 ## Project Overview
 
@@ -26,12 +26,14 @@ This project implements a local voice assistant capable of providing weather inf
 ### API Integration
 
 #### Weather API
+
 - **Endpoint**: `https://api.responsible-nlp.net/weather.php`
 - **Method**: POST
 - **Parameter**: `place` (location name)
 - **Response**: 7-day forecast including current day with temperature ranges and weather conditions
 
 **Available Weather Conditions**:
+
 - clear sky
 - few clouds
 - scattered clouds
@@ -43,16 +45,19 @@ This project implements a local voice assistant capable of providing weather inf
 - mist
 
 #### Calendar API
-- **Endpoint**: `https://api.responsible-nlp.net/calendar.php`
+
+- **Endpoint**: `https://api.responsible-nlp.net/calendar.php?calenderid=xxx`
+- **Important**: Replace `xxx` with a unique ID for your team. This ensures that teams do not interfere with each other's data.
 - **Operations**:
   - **CREATE** (POST): Add new calendar entries
-  - **READ** (GET): List all entries or get specific entry by ID
+  - **READ** (GET): List all entries or get a specific entry by ID
   - **UPDATE** (PUT): Modify existing entries
   - **DELETE** (DELETE): Remove entries
 
 ### Example Commands
 
 The system must handle commands such as:
+
 - "What will the weather be like today in Marburg?"
 - "What will the weather be on Friday in Frankfurt?"
 - "Will it rain there on Saturday?"
@@ -110,14 +115,17 @@ Choose one of the following package managers based on your preference:
 <summary>macOS</summary>
 
 **Via Homebrew (Recommended):**
+
 ```bash
 brew install uv
 ```
 
 **Via Official Installer:**
+
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
+
 </details>
 
 <details>
@@ -126,6 +134,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
+
 </details>
 
 <details>
@@ -134,6 +143,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ```powershell
 powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
+
 </details>
 
 **Setup Project**
@@ -167,19 +177,23 @@ python src/main.py
 <summary>macOS</summary>
 
 **Via Homebrew (Recommended):**
+
 ```bash
 brew install poetry
 ```
 
 **Via Official Installer:**
+
 ```bash
 curl -sSL https://install.python-poetry.org | python3 -
 ```
 
 Add Poetry to your PATH (add to `~/.zshrc` or `~/.bash_profile`):
+
 ```bash
 export PATH="$HOME/.local/bin:$PATH"
 ```
+
 </details>
 
 <details>
@@ -190,9 +204,11 @@ curl -sSL https://install.python-poetry.org | python3 -
 ```
 
 Add Poetry to your PATH (add to `~/.bashrc` or `~/.zshrc`):
+
 ```bash
 export PATH="$HOME/.local/bin:$PATH"
 ```
+
 </details>
 
 <details>
@@ -247,6 +263,7 @@ pip install -r requirements.txt
 # Run the application
 python src/main.py
 ```
+
 </details>
 
 <details>
@@ -272,6 +289,7 @@ pip install -r requirements.txt
 # Run the application
 python src/main.py
 ```
+
 </details>
 
 <details>
@@ -298,11 +316,13 @@ pip install -r requirements.txt
 # Run the application
 python src/main.py
 ```
+
 </details>
 
 ### Deactivating Virtual Environment
 
 For all options, simply run:
+
 ```bash
 deactivate
 ```
@@ -310,11 +330,13 @@ deactivate
 ### Running the Application
 
 #### Local Development
+
 ```bash
 python src/main.py
 ```
 
 #### Docker Container
+
 ```bash
 # Build the Docker image
 docker build -t nls-voice-assistant .
@@ -326,17 +348,20 @@ docker run -it nls-voice-assistant
 ## Development Guidelines
 
 ### Code Style
+
 - Follow PEP 8 guidelines for Python code
 - Use meaningful variable and function names
 - Add docstrings to all functions and classes
 - Comment complex logic
 
 ### Testing
+
 - Write unit tests for all components
 - Test API integrations thoroughly
 - Validate conversation flow with multiple test scenarios
 
 ### Version Control
+
 - Create feature branches for new functionality
 - Use descriptive commit messages
 - Submit pull requests for code review before merging to main
@@ -344,29 +369,35 @@ docker run -it nls-voice-assistant
 ## Components
 
 ### 1. Automatic Speech Recognition (ASR)
+
 - Converts spoken input to text
 - Must run locally (no cloud services)
 
 ### 2. Text-to-Speech (TTS)
+
 - Converts system responses to spoken output
 - Must run locally (no cloud services)
 
 ### 3. Natural Language Understanding (NLU)
+
 - Extracts intent and entities from user input
 - Handles weather queries and calendar commands
 
 ### 4. Dialogue Management
+
 - Maintains conversation state
 - Manages context and references to previous turns
 - Coordinates between components
 
 ### 5. API Integration
+
 - Weather API client
 - Calendar API client with CRUD operations
 
 ## Evaluation
 
 The final evaluation report (max 2 pages + title sheet) will include:
+
 - System architecture description
 - Evaluation methodology
 - Performance metrics
@@ -376,16 +407,18 @@ The final evaluation report (max 2 pages + title sheet) will include:
 ## Troubleshooting
 
 ### Common Issues
+
 - [To be added as issues arise]
 
 ## Resources
 
 - [University of Marburg NLP Group](https://www.uni-marburg.de/)
-- Project API Documentation: https://api.responsible-nlp.net/
-- GitHub Repository: https://github.com/s3m3dov/nls-voice-assistant
+- Project API Documentation: <https://api.responsible-nlp.net/>
+- GitHub Repository: <https://github.com/s3m3dov/nls-voice-assistant>
 
 ## Contact
 
 For questions regarding the project, contact:
+
 - Course Instructor: Daniel Braun
 - Teaching Assistant: Lucas Fonseca Lage
