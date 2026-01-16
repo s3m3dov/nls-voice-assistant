@@ -35,13 +35,16 @@ def main():
         voices_path=settings.tts.voices_path,
         voice=settings.tts.voice,
     )
-    logger.info("Ready!")
-
-    logger.info("Voice Assistant Ready!")
-    logger.info("Voice mode is active (listening automatically)")
-    logger.info("Press Ctrl+C to exit")
+    logger.info("Voice Assistant is ready!")
 
     messages = [{"role": "system", "content": build_system_prompt()}]
+
+    # Assistant speaks first with a greeting
+    greeting = "Hello! How can I help you today?"
+    logger.info(f"Assistant: {greeting}")
+    samples, sample_rate = tts.synthesize(greeting)
+    play_samples(samples, sample_rate)
+    messages.append({"role": "assistant", "content": greeting})
 
     while True:
         try:
