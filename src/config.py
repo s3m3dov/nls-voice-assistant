@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings
 
 from src.api.config import APISettings
+from src.asr.config import ASRSettings
 from src.dialogue.config import DialogueSettings
 from src.tts.config import TTSSettings
 
@@ -15,9 +16,11 @@ class Settings(BaseSettings):
         calendar_id="team-ezekiel"
     )
 
-    model_config = {
-        "extra": "ignore",
-    }
+    # ASR settings (nested)
+    asr: ASRSettings = ASRSettings(
+        model_name="distil-whisper/distil-medium.en",
+    )
+
     # TTS settings (nested)
     tts: TTSSettings = TTSSettings(
         model_path="kokoro-v1.0.onnx",
