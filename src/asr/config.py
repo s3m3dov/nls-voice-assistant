@@ -8,6 +8,10 @@ class ASRSettings(BaseSettings):
 
     # Model configuration
     model_name: str = Field(description="Whisper model size (tiny, base, small, medium, large)")
+    language: str = Field(
+        default="en",
+        description="Language code for transcription (e.g., 'en' for English)",
+    )
 
     # Audio settings
     sample_rate: int = Field(
@@ -37,7 +41,7 @@ class ASRSettings(BaseSettings):
         description="Minimum number of chunks to consider as speech",
     )
     silence_chunks_to_stop: int = Field(
-        default=25,
+        default=30,
         description="Number of silence chunks to stop recording",
     )
     max_recording_seconds: int = Field(
