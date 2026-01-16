@@ -5,7 +5,7 @@ from typing import Generator
 from ollama import chat
 
 from src.config import settings
-from src.dialogue.tools import TOOLS, TOOL_REGISTRY
+from src.dialogue.tools import TOOLS, TOOL_REGISTRY, TOOL_ANNOUNCEMENTS
 
 
 def _build_date_context() -> str:
@@ -93,6 +93,12 @@ def chat_stream(user_input: str, messages: list) -> Generator[str, None, None]:
         if not tool_calls:
             messages.append({"role": "assistant", "content": full_content})
             return
+
+        # Announce tool usage (yield to stream for TTS, but don't add to history)
+        for tool_call in tool_calls:
+            tool_name = tool_call.function.name
+            if tool_name in TOOL_ANNOUNCEMENTS:
+                yield f" {TOOL_ANNOUNCEMENTS[tool_name]} "
 
         # Record assistant message with tool calls
         messages.append({
