@@ -6,6 +6,7 @@ from ollama import chat
 
 from src.dialogue.tools import TOOLS, TOOL_REGISTRY
 
+# TODO: Make this configurable
 MODEL = "qwen2.5:7b-instruct"
 
 
@@ -26,7 +27,7 @@ def build_system_prompt() -> str:
     week_calendar = _build_date_context()
 
     return f"""
-        You are a helpful assistant. 
+        You are a helpful VOICE assistant. 
         
         You can:
         - Answer general questions
