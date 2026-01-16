@@ -18,7 +18,9 @@ def get_weather_forecast(place: str) -> str:
     Returns:
         JSON string with forecast data including temperature and conditions for each day.
     """
+    # print("Place:", place, sep=" ")
     result = _weather_client.get_forecast(place)
+    # print(result.model_dump_json())
     return result.model_dump_json()
 
 
@@ -32,7 +34,9 @@ def get_weather_for_day(place: str, day: str) -> str:
     Returns:
         JSON string with temperature and weather conditions, or error message if day not found.
     """
+    # print("Place:", place, "Day:", day, sep=" ")
     result = _weather_client.get_weather_for_day(place, day)
+    # print(result.model_dump_json())
     if result is None:
         return f"No weather data found for {day} in {place}."
     return result.model_dump_json()
@@ -40,7 +44,9 @@ def get_weather_for_day(place: str, day: str) -> str:
 
 def get_weather_for_today(place: str) -> str:
     """Get today's weather forecast."""
+    # print("Place:", place, sep=" ")
     result = _weather_client.get_weather_for_today(place)
+    # print(result.model_dump_json())
     if result is None:
         return f"No weather data found for today in {place}."
     return result.model_dump_json()
