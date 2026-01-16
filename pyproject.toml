@@ -7,44 +7,40 @@ requires-python = ">=3.12"
 
 dependencies = [
     # --- Core ML / ASR ---
+    "datasets>=2.18,<4.0",
+    "numpy>=2.0.2,<2.1",
+    "openai-whisper>=20250625",
     "torch>=2.9,<3.0",
     "torchaudio>=2.9,<3.0",
-    "numpy>=2.0.2,<2.1",
     "transformers>=4.36,<5.0",
-    "datasets>=2.18,<4.0",
-    "openai-whisper>=20250625",
-
-    # --- Audio / DSP ---
+    # --- Audio / DSP / Evaluation ---
+    "jiwer>=3.0,<5.0",
     "librosa>=0.10,<0.12",
     "soundfile>=0.12,<0.14",
-    "jiwer>=3.0,<5.0",
-
-    # --- TTS / misc ---
-    "pyttsx3>=2.90,<3.0",
+    # --- TTS ---
     "kokoro-onnx>=0.4.9",
     "misaki>=0.9.4",
-
+    "pyttsx3>=2.90,<3.0",
+    # --- Local LLM Runtime ---
+    "ollama>=0.6.1",
     # --- Config / Validation ---
     "pydantic>=2.0,<3.0",
     "pydantic-settings>=2.0,<3.0",
-
     # --- HTTP ---
     "requests>=2.31,<3.0",
-
+    # --- Data / Notebooks ---
+    "ipykernel>=6.29,<8.0",
+    "pandas>=2.1,<2.4",
+    "pandas-stubs>=2.1,<2.4",
     # --- Plotting ---
     "matplotlib>=3.8.4,<4.0",
     "seaborn>=0.13.2,<0.14",
-
-    # --- Data / notebooks ---
-    "pandas>=2.1,<2.4",
-    "pandas-stubs>=2.1,<2.4",
-    "ipykernel>=6.29,<8.0",
 ]
 
 [dependency-groups]
 dev = [
     "mypy>=1.8,<2.0",
-    "ruff>=0.4,<1.0",
     "pytest>=8.0,<9.0",
     "pytest-mock>=3.12,<4.0",
+    "ruff>=0.4,<1.0",
 ]
