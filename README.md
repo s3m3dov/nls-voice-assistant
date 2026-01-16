@@ -52,10 +52,10 @@ models.
 - **Important**: Replace `xxx` with a unique ID for your team. This ensures that teams do not interfere with each
   other's data.
 - **Operations**:
-    - **CREATE** (POST): Add new calendar entries
-    - **READ** (GET): List all entries or get a specific entry by ID
-    - **UPDATE** (PUT): Modify existing entries
-    - **DELETE** (DELETE): Remove entries
+  - **CREATE** (POST): Add new calendar entries
+  - **READ** (GET): List all entries or get a specific entry by ID
+  - **UPDATE** (PUT): Modify existing entries
+  - **DELETE** (DELETE): Remove entries
 
 ### Example Commands
 
@@ -77,26 +77,6 @@ The system must handle commands such as:
 | **MS2**   | Weather and Calendar API integration       | 28.11.2025 |
 | **MS3**   | Functional voice assistant                 | 12.12.2025 |
 | **MS4**   | Final Docker container + evaluation report | 30.01.2025 |
-
-## Project Structure
-
-```
-.
-├── README.md
-├── Dockerfile
-├── pyproject.toml        # Poetry configuration
-├── requirements.txt      # pip/uv requirements
-├── src/
-│   ├── asr/              # Automatic Speech Recognition
-│   ├── tts/              # Text-to-Speech
-│   ├── nlu/              # Natural Language Understanding
-│   ├── dialogue/         # Dialogue Management
-│   ├── api/              # API Integration (Weather & Calendar)
-│   └── main.py           # Main application entry point
-├── tests/                # Unit and integration tests
-├── evaluation/           # Evaluation scripts and results
-└── docs/                 # Additional documentation
-```
 
 ## Setup Instructions
 
@@ -340,13 +320,46 @@ python src/main.py
 
 #### Docker Container
 
+**Prerequisites**: Docker and Docker Compose installed.
+
+**Quick Start with Docker Compose (Recommended)**:
+
+```bash
+# Build and start all services (voice assistant + Ollama LLM)
+docker-compose up --build
+
+# Run in background
+docker-compose up -d --build
+
+# View logs
+docker-compose logs -f voice-assistant
+
+# Stop all services
+docker-compose down
+```
+
+> **Note**: First build takes ~10-15 minutes to download models (Whisper ASR, Kokoro TTS, Ollama LLM).
+
+**Manual Docker Build**:
+
 ```bash
 # Build the Docker image
 docker build -t nls-voice-assistant .
 
-# Run the container
-docker run -it nls-voice-assistant
+# Run with external Ollama instance
+docker run -it --rm \
+    -e OLLAMA_HOST=http://host.docker.internal:11434 \
+    nls-voice-assistant
 ```
+
+**What Gets Downloaded During Build**:
+
+| Model | Size | Purpose |
+|-------|------|---------|
+| Whisper (distil-medium.en) | ~750MB | Speech-to-text |
+| Kokoro TTS | ~350MB | Text-to-speech |
+| Silero VAD | ~5MB | Voice activity detection |
+| qwen2.5:7b-instruct | ~4.5GB | LLM (via Ollama) |
 
 ## Development Guidelines
 
