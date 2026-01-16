@@ -31,7 +31,7 @@ def get_weather_for_day(place: str, day: str) -> str:
 
     Args:
         place: City or location name (e.g., 'Marburg', 'Frankfurt')
-        day: Day of the week (e.g., 'monday', 'tuesday', 'friday')
+        day: Day of the week ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday')
 
     Returns:
         JSON string with temperature and weather conditions, or error message if day not found.
