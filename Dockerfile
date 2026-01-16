@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
     git \
+    portaudio19-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install uv for fast Python package management
@@ -30,24 +31,24 @@ RUN uv venv /app/.venv && \
 # Download Kokoro TTS model files
 RUN mkdir -p /app/models && \
     curl -L -o /app/models/kokoro-v1.0.onnx \
-        https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx && \
+    https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx && \
     curl -L -o /app/models/voices-v1.0.bin \
-        https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin
+    https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin
 
 # Pre-download Whisper model to cache it in the image
 ENV HF_HOME=/app/.cache/huggingface
 RUN /app/.venv/bin/python -c "\
-from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor; \
-model_id = 'distil-whisper/distil-medium.en'; \
-AutoModelForSpeechSeq2Seq.from_pretrained(model_id); \
-AutoProcessor.from_pretrained(model_id); \
-print('Whisper model downloaded successfully')"
+    from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor; \
+    model_id = 'distil-whisper/distil-medium.en'; \
+    AutoModelForSpeechSeq2Seq.from_pretrained(model_id); \
+    AutoProcessor.from_pretrained(model_id); \
+    print('Whisper model downloaded successfully')"
 
 # Pre-download Silero VAD model
 RUN /app/.venv/bin/python -c "\
-import torch; \
-torch.hub.load(repo_or_dir='snakers4/silero-vad', model='silero_vad', force_reload=False); \
-print('Silero VAD downloaded successfully')"
+    import torch; \
+    torch.hub.load(repo_or_dir='snakers4/silero-vad', model='silero_vad', force_reload=False); \
+    print('Silero VAD downloaded successfully')"
 
 
 # -----------------------------------------------------------------------------
