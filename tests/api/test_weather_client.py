@@ -124,7 +124,7 @@ class TestWeatherClient:
         mock_response.raise_for_status = MagicMock()
         mock_post.return_value = mock_response
 
-        result = client.get_today_weather("Marburg")
+        result = client.get_weather_for_today("Marburg")
 
         assert result is not None
         assert result.day == "thursday"

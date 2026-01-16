@@ -22,13 +22,13 @@ class WeatherClient:
 
     def get_forecast(self, place: str) -> WeatherResponse:
         """
-        Get weather forecast for a location.
+        Get a weather forecast for a location.
 
         Args:
             place: The location name to get weather for.
 
         Returns:
-            WeatherResponse object containing 7-day forecast.
+            WeatherResponse object containing a 7-day forecast.
 
         Raises:
             WeatherAPIError: If the API request fails.
@@ -70,7 +70,7 @@ class WeatherClient:
         forecast = self.get_forecast(place)
         return forecast.get_day(day)
 
-    def get_today_weather(self, place: str) -> Optional[DayForecastResponse]:
+    def get_weather_for_today(self, place: str) -> Optional[DayForecastResponse]:
         """
         Get today's weather forecast.
 
