@@ -1,0 +1,60 @@
+services:
+  # Ollama LLM service
+  ollama:
+    image: ollama/ollama:latest
+    container_name: nls-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:11434/api/tags" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Model initialization - pulls required LLM model
+  ollama-init:
+    image: ollama/ollama:latest
+    container_name: nls-ollama-init
+    depends_on:
+      ollama:
+        condition: service_healthy
+    entrypoint: [ "/bin/sh", "-c" ]
+    command:
+      - |
+        echo "Pulling qwen2.5:7b-instruct model..."
+        ollama pull qwen2.5:7b-instruct
+        echo "Model ready!"
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    restart: "no"
+
+  # Voice Assistant application
+  voice-assistant:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nls-voice-assistant
+    depends_on:
+      ollama-init:
+        condition: service_completed_successfully
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    # Audio device passthrough (Linux with ALSA)
+    # Uncomment and adjust for your system
+    # devices:
+    #   - /dev/snd:/dev/snd
+    # For PulseAudio on Linux:
+    # volumes:
+    #   - /run/user/1000/pulse:/run/user/1000/pulse
+    #   - ~/.config/pulse/cookie:/root/.config/pulse/cookie
+    # environment:
+    #   - PULSE_SERVER=unix:/run/user/1000/pulse/native
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+volumes:
+  ollama_data:

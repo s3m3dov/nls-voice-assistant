@@ -1,0 +1,50 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large model files (downloaded during build)
+kokoro-v1.0.onnx
+voices-v1.0.bin
+
+# Test and evaluation files
+tests/
+evaluation/
+
+# Lock files (we copy them explicitly)
+# uv.lock
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Local development
+*.log
+*.tmp
