@@ -49,7 +49,7 @@ def sanitize_for_tts(text: str) -> str:
         text = re.sub(r"\s+", " ", text)
         text = text.strip()
         
-        logger.debug(f"Sanitized text for TTS. Input: '{original_text[:50]}...', Output: '{text[:50]}...'")
+        logger.info(f"Sanitized text for TTS. Input: '{original_text[:50]}...', Output: '{text[:50]}...'")
         
     except Exception as e:
         logger.error(f"Error during text sanitization: {e}")
