@@ -9,10 +9,6 @@ __pycache__/
 # C extensions
 *.so
 
-# Large TTS models
-src/tts/*.onnx
-src/tts/*.bin
-
 # Distribution / packaging
 .Python
 build/
@@ -158,3 +154,7 @@ Icon
 #-------------------------------
 # Add any project-specific ignores here
 **/data/
+
+# Large TTS models
+*.onnx
+*.bin
