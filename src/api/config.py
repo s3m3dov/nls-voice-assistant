@@ -23,10 +23,6 @@ class APISettings(BaseSettings):
         description="Request timeout in seconds",
     )
 
-    model_config = {
-        "extra": "ignore",
-    }
-
     @property
     def weather_endpoint(self) -> str:
         """Weather API endpoint URL."""
