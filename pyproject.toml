@@ -16,7 +16,7 @@ dependencies = [
     "torch>=2.9,<3.0",
     "torchaudio>=2.9,<3.0",
     # ASR (speech-to-text)
-    "openai-whisper>=20250625",
+    "faster-whisper>=1.1.0",
     # Voice activity detection
     "silero-vad>=5.1,<6.0",
     # Audio I/O (microphone / playback)

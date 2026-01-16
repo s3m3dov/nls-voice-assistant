@@ -18,7 +18,7 @@ class Settings(BaseSettings):
 
     # ASR settings (nested)
     asr: ASRSettings = ASRSettings(
-        model_name="distil-whisper/distil-medium.en",
+        model_name="small",
     )
 
     # TTS settings (nested)
