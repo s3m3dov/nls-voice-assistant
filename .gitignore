@@ -154,7 +154,8 @@ Icon
 #-------------------------------
 # Add any project-specific ignores here
 **/data/
+**/tts/audio.wav
 
-# Large TTS models
+# Large models
 *.onnx
 *.bin
