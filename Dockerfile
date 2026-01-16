@@ -35,20 +35,17 @@ RUN mkdir -p /app/models && \
     curl -L -o /app/models/voices-v1.0.bin \
     https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin
 
-# Pre-download Whisper model to cache it in the image
-ENV HF_HOME=/app/.cache/huggingface
+# Pre-download Faster-Whisper model to cache it in the image
 RUN /app/.venv/bin/python -c "\
-    from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor; \
-    model_id = 'distil-whisper/distil-medium.en'; \
-    AutoModelForSpeechSeq2Seq.from_pretrained(model_id); \
-    AutoProcessor.from_pretrained(model_id); \
-    print('Whisper model downloaded successfully')"
+from faster_whisper import WhisperModel; \
+WhisperModel('small', device='cpu', compute_type='int8'); \
+print('Faster-Whisper small model downloaded successfully')"
 
 # Pre-download Silero VAD model
 RUN /app/.venv/bin/python -c "\
-    import torch; \
-    torch.hub.load(repo_or_dir='snakers4/silero-vad', model='silero_vad', force_reload=False); \
-    print('Silero VAD downloaded successfully')"
+import torch; \
+model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad', model='silero_vad', force_reload=False); \
+print('Silero VAD downloaded successfully')"
 
 
 # -----------------------------------------------------------------------------
@@ -62,12 +59,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     portaudio19-dev \
     libsndfile1 \
     libasound2-dev \
-    # For Whisper audio processing
+    # For Whisper audio processing \
     ffmpeg \
-    # For alternative TTS (pyttsx3)
+    # For alternative TTS (pyttsx3) \
     espeak-ng \
     libespeak-ng1 \
-    # For spaCy
+    # For spaCy \
     libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
@@ -79,7 +76,7 @@ COPY --from=builder /app/.venv /app/.venv
 # Copy pre-downloaded models from builder
 COPY --from=builder /app/models/kokoro-v1.0.onnx /app/kokoro-v1.0.onnx
 COPY --from=builder /app/models/voices-v1.0.bin /app/voices-v1.0.bin
-COPY --from=builder /app/.cache /root/.cache
+COPY --from=builder /root/.cache /root/.cache
 
 # Copy application source code
 COPY src/ /app/src/
