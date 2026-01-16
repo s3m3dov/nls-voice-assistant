@@ -4,7 +4,7 @@ from typing import Generator
 
 from ollama import chat
 
-from src.tools import TOOLS, TOOL_REGISTRY
+from src.dialogue.tools import TOOLS, TOOL_REGISTRY
 
 MODEL = "qwen2.5:7b-instruct"
 
