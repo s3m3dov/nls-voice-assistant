@@ -4,10 +4,8 @@ from typing import Generator
 
 from ollama import chat
 
+from src.config import settings
 from src.dialogue.tools import TOOLS, TOOL_REGISTRY
-
-# TODO: Make this configurable
-MODEL = "qwen2.5:7b-instruct"
 
 
 def _build_date_context() -> str:
@@ -84,7 +82,7 @@ def chat_stream(user_input: str, messages: list) -> Generator[str, None, None]:
         tool_calls = []
 
         # Stream response
-        for chunk in chat(model=MODEL, messages=messages, tools=TOOLS, stream=True):
+        for chunk in chat(model=settings.dialogue.llm_model, messages=messages, tools=TOOLS, stream=True):
             if chunk.message.content:
                 full_content += chunk.message.content
                 yield chunk.message.content
