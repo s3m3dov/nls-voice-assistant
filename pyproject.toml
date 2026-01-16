@@ -6,41 +6,56 @@ readme = "README.md"
 requires-python = ">=3.12"
 
 dependencies = [
-    # --- Core ML / ASR ---
-    "datasets>=2.18,<4.0",
+    # Core runtime / foundation
+    "pip>=25.3",
+    # Data + model ecosystem
     "numpy>=2.0.2,<2.1",
-    "openai-whisper>=20250625",
+    "datasets>=2.18,<4.0",
+    "transformers>=4.36,<5.0",
+    # Torch / audio backends
     "torch>=2.9,<3.0",
     "torchaudio>=2.9,<3.0",
-    "transformers>=4.36,<5.0",
-    # --- Audio / DSP / Evaluation ---
+    # ASR (speech-to-text)
+    "openai-whisper>=20250625",
+    # Voice activity detection
+    "silero-vad>=5.1,<6.0",
+    # Audio I/O (microphone / playback)
+    "pyaudio>=0.2.14,<0.3",
+    "sounddevice>=0.5.3",
+    # Audio DSP + formats + evaluation
     "jiwer>=3.0,<5.0",
     "librosa>=0.10,<0.12",
     "soundfile>=0.12,<0.14",
-    # --- TTS ---
+    # NLP / text processing (normalization, etc.)
+    "num2words>=0.5.14",
+    "spacy>=3.8.11",
+    # TTS (text-to-speech)
     "kokoro-onnx>=0.4.9",
     "misaki>=0.9.4",
     "pyttsx3>=2.90,<3.0",
-    # --- Local LLM Runtime ---
+    # Local LLM runtime / chat
     "ollama>=0.6.1",
-    # --- Config / Validation ---
+    # App config / validation
     "pydantic>=2.0,<3.0",
     "pydantic-settings>=2.0,<3.0",
-    # --- HTTP ---
+    # HTTP clients / integrations
     "requests>=2.31,<3.0",
-    # --- Data / Notebooks ---
+    # Notebooks / analysis
     "ipykernel>=6.29,<8.0",
     "pandas>=2.1,<2.4",
     "pandas-stubs>=2.1,<2.4",
-    # --- Plotting ---
+    # Plotting / visualization
     "matplotlib>=3.8.4,<4.0",
     "seaborn>=0.13.2,<0.14",
 ]
 
 [dependency-groups]
 dev = [
+    # Linting / formatting
+    "ruff>=0.4,<1.0",
+    # Typing
     "mypy>=1.8,<2.0",
+    # Testing
     "pytest>=8.0,<9.0",
     "pytest-mock>=3.12,<4.0",
-    "ruff>=0.4,<1.0",
 ]
