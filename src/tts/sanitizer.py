@@ -1,8 +1,9 @@
 import re
-import logging
-from src.logger import logger
+
 from emoji import replace_emoji
 from strip_markdown import strip_markdown
+
+from src.logger import logger
 
 
 def sanitize_for_tts(text: str) -> str:

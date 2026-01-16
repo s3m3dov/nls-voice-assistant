@@ -1,7 +1,8 @@
 """Silero VAD (Voice Activity Detection) wrapper."""
 import torch
-from src.config import settings
 from silero_vad import get_speech_timestamps, load_silero_vad
+
+from src.config import settings
 
 
 class SileroVAD:

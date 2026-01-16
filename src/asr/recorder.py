@@ -3,8 +3,8 @@ import numpy as np
 import pyaudio
 import torch
 
-from src.config import settings
 from src.asr.vad import SileroVAD
+from src.config import settings
 
 # Audio constants
 FORMAT = pyaudio.paInt16

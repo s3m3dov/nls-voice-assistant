@@ -7,9 +7,7 @@ class ASRSettings(BaseSettings):
     """ASR configuration settings."""
 
     # Model configuration
-    model_name: str = Field(
-        description="HuggingFace model ID for Whisper",
-    )
+    model_name: str = Field(description="HuggingFace model ID for Whisper")
 
     # Audio settings
     sample_rate: int = Field(
