@@ -1,40 +1,59 @@
 """
-Usage:
-1.
-    Install uv from https://docs.astral.sh/uv/getting-started/installation
-2.
-    Copy this file to new folder
-3.
-    Download these files
+Kokoro TTS Engine
+
+Requirements:
+    pip install kokoro-onnx soundfile 'misaki[en]'
+
+Model files needed (download to project root or specify paths):
     https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx
     https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin
-4. Run
-    uv venv --seed -p 3.12
-    source .venv/bin/activate
-    uv pip install -U kokoro-onnx soundfile 'misaki[en]'
-    uv run main.py
-
-For other languages read https://huggingface.co/hexgrad/Kokoro-82M/blob/main/VOICES.md
 """
 
 import soundfile as sf
 from kokoro_onnx import Kokoro
 from misaki import en, espeak
 
-# Misaki G2P with espeak-ng fallback
-fallback = espeak.EspeakFallback(british=False)
-g2p = en.G2P(trf=False, british=False, fallback=fallback)
+from src.logger import logger
 
-# Kokoro
-kokoro = Kokoro("kokoro-v1.0.onnx", "voices-v1.0.bin")
 
-# Phonemize
-text = "Ali, my friend. Do not get upset. Keep up good work"
-phonemes, _ = g2p(text)
+class KokoroTTS:
+    def __init__(
+        self,
+        model_path: str,
+        voices_path: str,
+        voice: str,
+    ):
+        self.voice = voice
+        
+        # Initialize G2P with espeak-ng fallback
+        fallback = espeak.EspeakFallback(british=False)
+        self.g2p = en.G2P(trf=False, british=False, fallback=fallback)
+        
+        # Initialize Kokoro
+        self.kokoro = Kokoro(model_path, voices_path)
 
-# Create
-samples, sample_rate = kokoro.create(phonemes, "af_heart", is_phonemes=True)
+    def speak(self, text: str, output_path: str = "output.wav") -> str:
+        """Convert text to speech and save to file."""
+        phonemes, _ = self.g2p(text)
+        samples, sample_rate = self.kokoro.create(phonemes, self.voice, is_phonemes=True)
+        sf.write(output_path, samples, sample_rate)
+        return output_path
 
-# Save
-sf.write("audio.wav", samples, sample_rate)
-print("Created audio.wav")
+    def synthesize(self, text: str) -> tuple:
+        """Convert text to audio samples without saving to file.
+        
+        Returns:
+            Tuple of (samples, sample_rate) for playback.
+        """
+        phonemes, _ = self.g2p(text)
+        samples, sample_rate = self.kokoro.create(phonemes, self.voice, is_phonemes=True)
+        return samples, sample_rate
+
+
+if __name__ == "__main__":
+    from src.logger import setup_logging
+    setup_logging()
+    tts = KokoroTTS()
+    tts.speak("Hello! This is a test of the Kokoro text to speech system.", "audio.wav")
+    logger.info("Created audio.wav")
+

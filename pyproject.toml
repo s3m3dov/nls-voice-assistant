@@ -40,6 +40,9 @@ dependencies = [
     "pydantic-settings>=2.0,<3.0",
     # HTTP clients / integrations
     "requests>=2.31,<3.0",
+    # Text sanitization
+    "strip-markdown>=1.0.1",
+    "emoji>=2.10.1",
     # Notebooks / analysis
     "ipykernel>=6.29,<8.0",
     "pandas>=2.1,<2.4",
