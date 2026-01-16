@@ -44,7 +44,9 @@ class WhisperTranscriber:
             audio_np = np.array(audio, dtype=np.float32)
 
         # Run transcription
-        segments, _ = self.model.transcribe(audio_np, beam_size=5)
+        segments, _ = self.model.transcribe(
+            audio_np, beam_size=5, language=settings.asr.language
+        )
 
         # Collect all segment texts
         text = " ".join(segment.text for segment in segments)
