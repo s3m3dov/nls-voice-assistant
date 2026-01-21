@@ -1,0 +1,49 @@
+[
+  {
+    "id": "weather_general",
+    "input": "Get me the 7-day weather forecast for Marburg.",
+    "expected_tool": "get_weather_forecast",
+    "expected_args": {
+      "place": "Marburg"
+    }
+  },
+  {
+    "id": "weather_specific_day",
+    "input": "Will it rain in Frankfurt on Friday?",
+    "expected_tool": "get_weather_for_day",
+    "expected_args": {
+      "place": "Frankfurt",
+      "day": "friday"
+    }
+  },
+  {
+    "id": "weather_today",
+    "input": "How is the weather today in Berlin?",
+    "expected_tool": "get_weather_for_today",
+    "expected_args": {
+      "place": "Berlin"
+    }
+  },
+  {
+    "id": "calendar_list",
+    "input": "What do I have on my calendar?",
+    "expected_tool": "list_calendar_events",
+    "expected_args": {}
+  },
+  {
+    "id": "calendar_create_simple",
+    "input": "Add a Dentist Appointment to my calendar for tomorrow at 10:00 AM.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "Dentist Appointment"
+    }
+  },
+  {
+    "id": "calendar_delete",
+    "input": "Delete the event with ID 5.",
+    "expected_tool": "delete_calendar_event",
+    "expected_args": {
+      "event_id": 5
+    }
+  }
+]
