@@ -42,6 +42,11 @@ services:
         condition: service_completed_successfully
     environment:
       - OLLAMA_HOST=http://ollama:11434
+      - GRADIO_ANALYTICS_ENABLED=False
+    ports:
+      - "7860:7860"
+    # Run in web mode for Docker (browser-based audio)
+    command: ["python", "src/main.py", "--mode", "web"]
     # Audio device passthrough (Linux with ALSA)
     # Uncomment and adjust for your system
     # devices:
