@@ -4,6 +4,7 @@ from src.api.config import APISettings
 from src.asr.config import ASRSettings
 from src.dialogue.config import DialogueSettings
 from src.tts.config import TTSSettings
+from src.interface.ui.config import UISettings
 
 
 class Settings(BaseSettings):
@@ -32,6 +33,9 @@ class Settings(BaseSettings):
     dialogue: DialogueSettings = DialogueSettings(
         llm_model="qwen2.5:7b-instruct"
     )
+
+    # UI settings (nested)
+    ui: UISettings = UISettings()
 
 
 # Singleton instances
