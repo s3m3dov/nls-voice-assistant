@@ -156,6 +156,8 @@ Icon
 **/data/
 **/tts/audio.wav
 **/samples/
+**/evaluation/tts/plots/
+**/evaluation/tts/tmp_tts_audio/
 
 # Large models
 *.onnx
