@@ -91,6 +91,35 @@ def load_models():
     else:
         print(f"⚠️ Skipping eSpeak (not found at: {ESPEAK_EXE})")
 
+    # ---- Piper TTS ----
+    PIPER_EXE = Path(r"C:\piper\piper.exe")
+
+    PIPER_VOICE_A = Path(r"C:\piper\voices\en_US_lessac.onnx")
+    PIPER_CFG_A = Path(str(PIPER_VOICE_A) + ".json")
+
+    PIPER_VOICE_B = Path(r"C:\piper\voices\en_GB_alba.onnx")
+    PIPER_CFG_B = Path(str(PIPER_VOICE_B) + ".json")
+
+    if PIPER_EXE.exists() and PIPER_VOICE_A.exists():
+        def piper_voice_a(text, out_wav):
+            out_wav = str(Path(out_wav).resolve())
+            cmd = [str(PIPER_EXE), "-m", str(PIPER_VOICE_A), "-c", str(PIPER_CFG_A), "-f", out_wav]
+            subprocess.run(cmd, input=text.encode("utf-8"), check=True)
+
+        models["Piper_en_US"] = piper_voice_a
+    else:
+        print("⚠️ Skipping Piper en_US (piper.exe or model not found)")
+
+    if PIPER_EXE.exists() and PIPER_VOICE_B.exists():
+        def piper_voice_b(text, out_wav):
+            out_wav = str(Path(out_wav).resolve())
+            cmd = [str(PIPER_EXE), "-m", str(PIPER_VOICE_B), "-c", str(PIPER_CFG_B), "-f", out_wav]
+            subprocess.run(cmd, input=text.encode("utf-8"), check=True)
+
+        models["Piper_en_GB"] = piper_voice_b
+    else:
+        print("⚠️ Skipping Piper en_GB (piper.exe or model not found)")
+
     return models
 
 
