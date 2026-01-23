@@ -1,0 +1,1414 @@
+[
+  {
+    "case_id": "weather_01",
+    "category": "weather",
+    "history": [],
+    "user_utterance": "What is the weather in Marburg today?",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Marburg",
+        "day": "today"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Marburg"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "weather_02",
+    "category": "weather",
+    "history": [],
+    "user_utterance": "What will the weather be in Frankfurt on Friday?",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Frankfurt",
+        "day": "friday"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Frankfurt"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "weather_03",
+    "category": "weather",
+    "history": [],
+    "user_utterance": "Is it going to rain in Berlin tomorrow?",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Berlin",
+        "day": "tomorrow"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Berlin"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "weather_04",
+    "category": "weather",
+    "history": [],
+    "user_utterance": "Give me the 7-day forecast for Munich.",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Munich"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Munich"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "weather_05",
+    "category": "weather",
+    "history": [],
+    "user_utterance": "What's the weather like this Saturday in Hamburg?",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Hamburg",
+        "day": "saturday"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Hamburg"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "weather_06",
+    "category": "weather",
+    "history": [],
+    "user_utterance": "How cold will it be in Cologne on Monday?",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Cologne",
+        "day": "monday"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Cologne"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "weather_07",
+    "category": "weather",
+    "history": [],
+    "user_utterance": "Weather for Paris?",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Paris"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Paris"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "weather_08",
+    "category": "weather",
+    "history": [],
+    "user_utterance": "Will it snow in Vienna today?",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Vienna",
+        "day": "today"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Vienna"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "weather_09",
+    "category": "weather",
+    "history": [],
+    "user_utterance": "Tell me the forecast for London next Tuesday.",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "London",
+        "day": "tuesday"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "London"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "weather_10",
+    "category": "weather",
+    "history": [],
+    "user_utterance": "What's the weather in New York on Monday?",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "New York",
+        "day": "monday"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "New York"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "weather_11",
+    "category": "weather",
+    "history": [],
+    "user_utterance": "How is the weather in Madrid on Saturday?",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Madrid",
+        "day": "saturday"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Madrid"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "weather_12",
+    "category": "weather",
+    "history": [],
+    "user_utterance": "Check weather for Rome on Sunday.",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Rome",
+        "day": "sunday"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Rome"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "weather_13",
+    "category": "weather",
+    "history": [],
+    "user_utterance": "Weather in Tokyo on Sunday.",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Tokyo",
+        "day": "sunday"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Tokyo"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "weather_14",
+    "category": "weather",
+    "history": [],
+    "user_utterance": "Weather forecast for Zurich.",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Zurich"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Zurich"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "weather_15",
+    "category": "weather",
+    "history": [],
+    "user_utterance": "What's the temperature range in Oslo tomorrow?",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Oslo",
+        "day": "tomorrow"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Oslo"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "cal_create_01",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Add a meeting titled Team Sync on 2025-02-10 from 10:00 to 11:00.",
+    "expected": {
+      "intent": "CAL_CREATE",
+      "slots": {
+        "title": "Team Sync",
+        "start_time": "2025-02-10T10:00",
+        "end_time": "2025-02-10T11:00"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel"
+        },
+        "body": {
+          "title": "Team Sync",
+          "start_time": "2025-02-10T10:00",
+          "end_time": "2025-02-10T11:00"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "cal_create_02",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Create appointment Doctor Visit on 2025-03-01 09:30-10:00 at Clinic.",
+    "expected": {
+      "intent": "CAL_CREATE",
+      "slots": {
+        "title": "Doctor Visit",
+        "start_time": "2025-03-01T09:30",
+        "end_time": "2025-03-01T10:00",
+        "location": "Clinic"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel"
+        },
+        "body": {
+          "title": "Doctor Visit",
+          "start_time": "2025-03-01T09:30",
+          "end_time": "2025-03-01T10:00",
+          "location": "Clinic"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "cal_create_03",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Schedule lunch with Ana on 2025-04-05 from 12:00 to 13:00 at Bistro.",
+    "expected": {
+      "intent": "CAL_CREATE",
+      "slots": {
+        "title": "Lunch with Ana",
+        "start_time": "2025-04-05T12:00",
+        "end_time": "2025-04-05T13:00",
+        "location": "Bistro"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel"
+        },
+        "body": {
+          "title": "Lunch with Ana",
+          "start_time": "2025-04-05T12:00",
+          "end_time": "2025-04-05T13:00",
+          "location": "Bistro"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "cal_create_04",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Book 'Project Review' for 2025-05-20 14:00 to 15:30, location Room 2.",
+    "expected": {
+      "intent": "CAL_CREATE",
+      "slots": {
+        "title": "Project Review",
+        "start_time": "2025-05-20T14:00",
+        "end_time": "2025-05-20T15:30",
+        "location": "Room 2"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel"
+        },
+        "body": {
+          "title": "Project Review",
+          "start_time": "2025-05-20T14:00",
+          "end_time": "2025-05-20T15:30",
+          "location": "Room 2"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "cal_create_05",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Add event Gym on 2025-02-12 from 18:00 to 19:00.",
+    "expected": {
+      "intent": "CAL_CREATE",
+      "slots": {
+        "title": "Gym",
+        "start_time": "2025-02-12T18:00",
+        "end_time": "2025-02-12T19:00"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel"
+        },
+        "body": {
+          "title": "Gym",
+          "start_time": "2025-02-12T18:00",
+          "end_time": "2025-02-12T19:00"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "cal_list_01",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "List all my appointments.",
+    "expected": {
+      "intent": "CAL_LIST",
+      "slots": {},
+      "api_call": {
+        "method": "GET",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel"
+        },
+        "body": {}
+      }
+    }
+  },
+  {
+    "case_id": "cal_list_02",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Show my calendar.",
+    "expected": {
+      "intent": "CAL_LIST",
+      "slots": {},
+      "api_call": {
+        "method": "GET",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel"
+        },
+        "body": {}
+      }
+    }
+  },
+  {
+    "case_id": "cal_get_01",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Show event 42.",
+    "expected": {
+      "intent": "CAL_GET",
+      "slots": {
+        "id": "42"
+      },
+      "api_call": {
+        "method": "GET",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "42"
+        },
+        "body": {}
+      }
+    }
+  },
+  {
+    "case_id": "cal_get_02",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Get appointment with id 7.",
+    "expected": {
+      "intent": "CAL_GET",
+      "slots": {
+        "id": "7"
+      },
+      "api_call": {
+        "method": "GET",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "7"
+        },
+        "body": {}
+      }
+    }
+  },
+  {
+    "case_id": "cal_update_01",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Update event 42 set location to Zoom.",
+    "expected": {
+      "intent": "CAL_UPDATE",
+      "slots": {
+        "id": "42",
+        "location": "Zoom"
+      },
+      "api_call": {
+        "method": "PUT",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "42"
+        },
+        "body": {
+          "location": "Zoom"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "cal_update_02",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Change appointment 7 title to Project Kickoff.",
+    "expected": {
+      "intent": "CAL_UPDATE",
+      "slots": {
+        "id": "7",
+        "title": "Project Kickoff"
+      },
+      "api_call": {
+        "method": "PUT",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "7"
+        },
+        "body": {
+          "title": "Project Kickoff"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "cal_update_03",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Move event 12 to start at 2025-02-10T15:00 and end at 2025-02-10T16:00.",
+    "expected": {
+      "intent": "CAL_UPDATE",
+      "slots": {
+        "id": "12",
+        "start_time": "2025-02-10T15:00",
+        "end_time": "2025-02-10T16:00"
+      },
+      "api_call": {
+        "method": "PUT",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "12"
+        },
+        "body": {
+          "start_time": "2025-02-10T15:00",
+          "end_time": "2025-02-10T16:00"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "cal_update_04",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Reschedule meeting 3 to 2025-03-01T10:00-2025-03-01T11:00.",
+    "expected": {
+      "intent": "CAL_UPDATE",
+      "slots": {
+        "id": "3",
+        "start_time": "2025-03-01T10:00",
+        "end_time": "2025-03-01T11:00"
+      },
+      "api_call": {
+        "method": "PUT",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "3"
+        },
+        "body": {
+          "start_time": "2025-03-01T10:00",
+          "end_time": "2025-03-01T11:00"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "cal_delete_01",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Delete appointment 9.",
+    "expected": {
+      "intent": "CAL_DELETE",
+      "slots": {
+        "id": "9"
+      },
+      "api_call": {
+        "method": "DELETE",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "9"
+        },
+        "body": {}
+      }
+    }
+  },
+  {
+    "case_id": "cal_delete_02",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Remove event 12.",
+    "expected": {
+      "intent": "CAL_DELETE",
+      "slots": {
+        "id": "12"
+      },
+      "api_call": {
+        "method": "DELETE",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "12"
+        },
+        "body": {}
+      }
+    }
+  },
+  {
+    "case_id": "cal_create_06",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Create a calendar entry titled 'Flight' on 2025-06-01 from 06:00 to 08:00, location Airport.",
+    "expected": {
+      "intent": "CAL_CREATE",
+      "slots": {
+        "title": "Flight",
+        "start_time": "2025-06-01T06:00",
+        "end_time": "2025-06-01T08:00",
+        "location": "Airport"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel"
+        },
+        "body": {
+          "title": "Flight",
+          "start_time": "2025-06-01T06:00",
+          "end_time": "2025-06-01T08:00",
+          "location": "Airport"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "cal_create_07",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Add 'Dentist' for 2025-02-22 16:00-16:30.",
+    "expected": {
+      "intent": "CAL_CREATE",
+      "slots": {
+        "title": "Dentist",
+        "start_time": "2025-02-22T16:00",
+        "end_time": "2025-02-22T16:30"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel"
+        },
+        "body": {
+          "title": "Dentist",
+          "start_time": "2025-02-22T16:00",
+          "end_time": "2025-02-22T16:30"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "cal_create_08",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Schedule 'Study Session' on 2025-02-15 from 19:00 to 21:00 at Library.",
+    "expected": {
+      "intent": "CAL_CREATE",
+      "slots": {
+        "title": "Study Session",
+        "start_time": "2025-02-15T19:00",
+        "end_time": "2025-02-15T21:00",
+        "location": "Library"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel"
+        },
+        "body": {
+          "title": "Study Session",
+          "start_time": "2025-02-15T19:00",
+          "end_time": "2025-02-15T21:00",
+          "location": "Library"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "cal_update_05",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Update event 5 description to 'Bring slides'.",
+    "expected": {
+      "intent": "CAL_UPDATE",
+      "slots": {
+        "id": "5",
+        "description": "Bring slides"
+      },
+      "api_call": {
+        "method": "PUT",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "5"
+        },
+        "body": {
+          "description": "Bring slides"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "cal_update_06",
+    "category": "calendar",
+    "history": [],
+    "user_utterance": "Change event 5 location to Main Hall.",
+    "expected": {
+      "intent": "CAL_UPDATE",
+      "slots": {
+        "id": "5",
+        "location": "Main Hall"
+      },
+      "api_call": {
+        "method": "PUT",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "5"
+        },
+        "body": {
+          "location": "Main Hall"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "coref_01",
+    "category": "coref",
+    "history": [
+      {
+        "role": "user",
+        "text": "What's the weather in Berlin?"
+      },
+      {
+        "role": "assistant",
+        "text": "Berlin is cloudy today."
+      }
+    ],
+    "user_utterance": "Will it rain there tomorrow?",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Berlin",
+        "day": "tomorrow"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Berlin"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "coref_02",
+    "category": "coref",
+    "history": [
+      {
+        "role": "user",
+        "text": "What's the weather in Paris on Friday?"
+      },
+      {
+        "role": "assistant",
+        "text": "Paris will be mild on Friday."
+      }
+    ],
+    "user_utterance": "How about Saturday there?",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Paris",
+        "day": "saturday"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Paris"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "coref_03",
+    "category": "coref",
+    "history": [
+      {
+        "role": "user",
+        "text": "Create appointment titled Standup on 2025-02-01T09:00-2025-02-01T09:15."
+      },
+      {
+        "role": "assistant",
+        "text": "Created appointment with ID 101."
+      }
+    ],
+    "user_utterance": "Delete the previously created appointment.",
+    "expected": {
+      "intent": "CAL_DELETE",
+      "slots": {
+        "id": "101"
+      },
+      "api_call": {
+        "method": "DELETE",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "101"
+        },
+        "body": {}
+      }
+    }
+  },
+  {
+    "case_id": "coref_04",
+    "category": "coref",
+    "history": [
+      {
+        "role": "user",
+        "text": "Create event 'Interview' 2025-02-02 14:00-15:00."
+      },
+      {
+        "role": "assistant",
+        "text": "Created appointment with ID 102."
+      }
+    ],
+    "user_utterance": "Change the location of that appointment to Office.",
+    "expected": {
+      "intent": "CAL_UPDATE",
+      "slots": {
+        "id": "102",
+        "location": "Office"
+      },
+      "api_call": {
+        "method": "PUT",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "102"
+        },
+        "body": {
+          "location": "Office"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "coref_05",
+    "category": "coref",
+    "history": [
+      {
+        "role": "user",
+        "text": "I have a meeting in Munich tomorrow."
+      },
+      {
+        "role": "assistant",
+        "text": "Noted."
+      }
+    ],
+    "user_utterance": "What will the weather be there?",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Munich",
+        "day": "tomorrow"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Munich"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "coref_06",
+    "category": "coref",
+    "history": [
+      {
+        "role": "user",
+        "text": "List my appointments."
+      },
+      {
+        "role": "assistant",
+        "text": "You have event 55: Dentist on 2025-02-22."
+      }
+    ],
+    "user_utterance": "Delete that appointment.",
+    "expected": {
+      "intent": "CAL_DELETE",
+      "slots": {
+        "id": "55"
+      },
+      "api_call": {
+        "method": "DELETE",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "55"
+        },
+        "body": {}
+      }
+    }
+  },
+  {
+    "case_id": "coref_07",
+    "category": "coref",
+    "history": [
+      {
+        "role": "user",
+        "text": "Schedule 'Demo' on 2025-02-05 10:00-11:00."
+      },
+      {
+        "role": "assistant",
+        "text": "Created appointment with ID 77."
+      }
+    ],
+    "user_utterance": "Move it to 2025-02-05T11:00-2025-02-05T12:00.",
+    "expected": {
+      "intent": "CAL_UPDATE",
+      "slots": {
+        "id": "77",
+        "start_time": "2025-02-05T11:00",
+        "end_time": "2025-02-05T12:00"
+      },
+      "api_call": {
+        "method": "PUT",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "77"
+        },
+        "body": {
+          "start_time": "2025-02-05T11:00",
+          "end_time": "2025-02-05T12:00"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "coref_08",
+    "category": "coref",
+    "history": [
+      {
+        "role": "user",
+        "text": "What's the weather in Rome today?"
+      },
+      {
+        "role": "assistant",
+        "text": "Rome is sunny today."
+      }
+    ],
+    "user_utterance": "And there on Sunday?",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Rome",
+        "day": "sunday"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Rome"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "coref_09",
+    "category": "coref",
+    "history": [
+      {
+        "role": "user",
+        "text": "Create event 'Call' on 2025-03-03 09:00-09:30."
+      },
+      {
+        "role": "assistant",
+        "text": "Created appointment with ID 88."
+      }
+    ],
+    "user_utterance": "Update the title to 'Client Call'.",
+    "expected": {
+      "intent": "CAL_UPDATE",
+      "slots": {
+        "id": "88",
+        "title": "Client Call"
+      },
+      "api_call": {
+        "method": "PUT",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "88"
+        },
+        "body": {
+          "title": "Client Call"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "coref_10",
+    "category": "coref",
+    "history": [
+      {
+        "role": "user",
+        "text": "My appointment tomorrow is in Frankfurt."
+      },
+      {
+        "role": "assistant",
+        "text": "Your appointment ID is 64 for tomorrow in Frankfurt."
+      }
+    ],
+    "user_utterance": "Change the place for my appointment tomorrow to Berlin.",
+    "expected": {
+      "intent": "CAL_UPDATE",
+      "slots": {
+        "id": "64",
+        "location": "Berlin",
+        "day": "tomorrow"
+      },
+      "api_call": {
+        "method": "PUT",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "64"
+        },
+        "body": {
+          "location": "Berlin"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "robust_01",
+    "category": "robustness",
+    "history": [],
+    "user_utterance": "whats the weather in marburg tday",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Marburg",
+        "day": "today"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Marburg"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "robust_02",
+    "category": "robustness",
+    "history": [],
+    "user_utterance": "Could you, uh, list my appointments please?",
+    "expected": {
+      "intent": "CAL_LIST",
+      "slots": {},
+      "api_call": {
+        "method": "GET",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel"
+        },
+        "body": {}
+      }
+    }
+  },
+  {
+    "case_id": "robust_03",
+    "category": "robustness",
+    "history": [],
+    "user_utterance": "pls delete event 12",
+    "expected": {
+      "intent": "CAL_DELETE",
+      "slots": {
+        "id": "12"
+      },
+      "api_call": {
+        "method": "DELETE",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "12"
+        },
+        "body": {}
+      }
+    }
+  },
+  {
+    "case_id": "robust_04",
+    "category": "robustness",
+    "history": [],
+    "user_utterance": "set appt 'Gym' 2025-02-12 18:00-19:00",
+    "expected": {
+      "intent": "CAL_CREATE",
+      "slots": {
+        "title": "Gym",
+        "start_time": "2025-02-12T18:00",
+        "end_time": "2025-02-12T19:00"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel"
+        },
+        "body": {
+          "title": "Gym",
+          "start_time": "2025-02-12T18:00",
+          "end_time": "2025-02-12T19:00"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "robust_05",
+    "category": "robustness",
+    "history": [],
+    "user_utterance": "weather for frankfurt on fri",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Frankfurt",
+        "day": "friday"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Frankfurt"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "robust_06",
+    "category": "robustness",
+    "history": [],
+    "user_utterance": "umm update event 7 location to Zoom",
+    "expected": {
+      "intent": "CAL_UPDATE",
+      "slots": {
+        "id": "7",
+        "location": "Zoom"
+      },
+      "api_call": {
+        "method": "PUT",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "7"
+        },
+        "body": {
+          "location": "Zoom"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "robust_07",
+    "category": "robustness",
+    "history": [],
+    "user_utterance": "get appointment id=42",
+    "expected": {
+      "intent": "CAL_GET",
+      "slots": {
+        "id": "42"
+      },
+      "api_call": {
+        "method": "GET",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel",
+          "id": "42"
+        },
+        "body": {}
+      }
+    }
+  },
+  {
+    "case_id": "robust_08",
+    "category": "robustness",
+    "history": [],
+    "user_utterance": "is it gonna rain in berlin tmw?",
+    "expected": {
+      "intent": "WEATHER_QUERY",
+      "slots": {
+        "place": "Berlin",
+        "day": "tomorrow"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "weather",
+        "params": {},
+        "body": {
+          "place": "Berlin"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "robust_09",
+    "category": "robustness",
+    "history": [],
+    "user_utterance": "add meeting 'QA' 2025-03-10 09:00-10:00 at office",
+    "expected": {
+      "intent": "CAL_CREATE",
+      "slots": {
+        "title": "QA",
+        "start_time": "2025-03-10T09:00",
+        "end_time": "2025-03-10T10:00",
+        "location": "office"
+      },
+      "api_call": {
+        "method": "POST",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel"
+        },
+        "body": {
+          "title": "QA",
+          "start_time": "2025-03-10T09:00",
+          "end_time": "2025-03-10T10:00",
+          "location": "office"
+        }
+      }
+    }
+  },
+  {
+    "case_id": "robust_10",
+    "category": "robustness",
+    "history": [],
+    "user_utterance": "show my calendar entries",
+    "expected": {
+      "intent": "CAL_LIST",
+      "slots": {},
+      "api_call": {
+        "method": "GET",
+        "endpoint": "calendar",
+        "params": {
+          "calenderid": "team-ezekiel"
+        },
+        "body": {}
+      }
+    }
+  },
+  {
+    "case_id": "clarify_01",
+    "category": "clarify",
+    "history": [],
+    "user_utterance": "What's the weather?",
+    "expected": {
+      "intent": "CLARIFY",
+      "slots": {},
+      "api_call": {
+        "method": null,
+        "endpoint": null,
+        "params": {},
+        "body": {}
+      }
+    }
+  },
+  {
+    "case_id": "clarify_02",
+    "category": "clarify",
+    "history": [],
+    "user_utterance": "Add an appointment.",
+    "expected": {
+      "intent": "CLARIFY",
+      "slots": {},
+      "api_call": {
+        "method": null,
+        "endpoint": null,
+        "params": {},
+        "body": {}
+      }
+    }
+  },
+  {
+    "case_id": "clarify_03",
+    "category": "clarify",
+    "history": [],
+    "user_utterance": "Delete my appointment.",
+    "expected": {
+      "intent": "CLARIFY",
+      "slots": {},
+      "api_call": {
+        "method": null,
+        "endpoint": null,
+        "params": {},
+        "body": {}
+      }
+    }
+  },
+  {
+    "case_id": "clarify_04",
+    "category": "clarify",
+    "history": [],
+    "user_utterance": "Update event.",
+    "expected": {
+      "intent": "CLARIFY",
+      "slots": {},
+      "api_call": {
+        "method": null,
+        "endpoint": null,
+        "params": {},
+        "body": {}
+      }
+    }
+  },
+  {
+    "case_id": "clarify_05",
+    "category": "clarify",
+    "history": [],
+    "user_utterance": "What's the weather there?",
+    "expected": {
+      "intent": "CLARIFY",
+      "slots": {},
+      "api_call": {
+        "method": null,
+        "endpoint": null,
+        "params": {},
+        "body": {}
+      }
+    }
+  }
+]
