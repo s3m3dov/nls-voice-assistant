@@ -112,4 +112,11 @@ class VoiceAssistant:
             raise RuntimeError("Transcriber not initialized. Call initialize() first.")
 
         logger.debug("Transcribing audio...")
-        return self.transcriber.transcribe(audio_tensor)
+        
+        # Keyword priming for better accuracy on domain-specific terms
+        initial_prompt = (
+            "Voice assistant command. "
+            "Weather, Calendar, Schedule, Appointment, Meeting, Time, Date."
+        )
+        
+        return self.transcriber.transcribe(audio_tensor, initial_prompt=initial_prompt)

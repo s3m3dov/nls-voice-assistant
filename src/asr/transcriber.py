@@ -27,12 +27,13 @@ class WhisperTranscriber:
         compute_type = "float16" if device == "cuda" else "int8"
         self.model = WhisperModel(model_name, device=device, compute_type=compute_type)
 
-    def transcribe(self, audio: torch.Tensor | list[float]) -> str:
+    def transcribe(self, audio: torch.Tensor | list[float], initial_prompt: str | None = None) -> str:
         """
         Transcribe audio to text.
 
         Args:
             audio: Audio tensor or list (16kHz, mono, float32, normalized to [-1, 1]).
+            initial_prompt: Optional context prompt to guide the model.
 
         Returns:
             Transcribed text.
@@ -45,7 +46,10 @@ class WhisperTranscriber:
 
         # Run transcription
         segments, _ = self.model.transcribe(
-            audio_np, beam_size=5, language=settings.asr.language
+            audio_np, 
+            beam_size=5, 
+            language=settings.asr.language,
+            initial_prompt=initial_prompt
         )
 
         # Collect all segment texts
