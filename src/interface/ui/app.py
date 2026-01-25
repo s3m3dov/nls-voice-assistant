@@ -2,7 +2,6 @@
 
 import os
 import re
-from dataclasses import dataclass, field
 from enum import Enum
 from typing import Generator
 import numpy as np
@@ -20,7 +19,7 @@ def _patched_get_api_info(self):
 gr.Blocks.get_api_info = _patched_get_api_info
 
 from src.assistant import VoiceAssistant
-from src.asr.vad import SileroVAD
+from src.asr.stream import VADStreamProcessor, StreamState
 from src.logger import logger, setup_logging
 from src.interface.ui.config import UISettings
 from src.tts.audio_player import play_samples
@@ -28,14 +27,6 @@ from src.tts.sanitizer import sanitize_for_tts
 
 
 SENTENCE_SPLIT_RE = re.compile(r'(?<=[.!?])\s+')
-
-class AudioConfig:
-    """Audio processing configuration."""
-    TARGET_SAMPLE_RATE = 16000
-    VAD_WINDOW_SIZE = 512
-    SILENCE_THRESHOLD_CHUNKS = 30
-    MIN_SPEECH_CHUNKS = 5
-    VAD_THRESHOLD = 0.5
 
 
 class StatusIcon(str, Enum):
@@ -46,55 +37,6 @@ class StatusIcon(str, Enum):
     THINKING = "🤔 Thinking..."
     SPEAKING = "🗣️ Speaking..."
     ERROR = "❌ Error"
-
-
-
-
-class AudioProcessor:
-    """Handles audio normalization and resampling."""
-
-    @staticmethod
-    def normalize_audio(audio_data: np.ndarray) -> np.ndarray:
-        """Normalize audio to float32 [-1, 1] range."""
-        if audio_data.dtype == np.int16:
-            return audio_data.astype(np.float32) / 32768.0
-        elif audio_data.dtype == np.int32:
-            return audio_data.astype(np.float32) / 2147483648.0
-        return audio_data.astype(np.float32)
-
-    @staticmethod
-    def to_mono(audio_data: np.ndarray) -> np.ndarray:
-        """Convert stereo to mono."""
-        if len(audio_data.shape) > 1:
-            return audio_data.mean(axis=1)
-        return audio_data
-
-    @staticmethod
-    def resample(audio_data: np.ndarray,
-                 source_sr: int,
-                 target_sr: int) -> np.ndarray:
-        """Simple resampling via decimation."""
-        if source_sr == target_sr:
-            return audio_data
-
-        step = int(source_sr / target_sr)
-        if step > 0:
-            return audio_data[::step]
-        return audio_data
-
-    @classmethod
-    def preprocess(cls,
-                   audio_data: np.ndarray,
-                   sample_rate: int) -> torch.Tensor:
-        """Complete preprocessing pipeline."""
-        audio_data = cls.normalize_audio(audio_data)
-        audio_data = cls.to_mono(audio_data)
-        audio_data = cls.resample(
-            audio_data,
-            sample_rate,
-            AudioConfig.TARGET_SAMPLE_RATE
-        )
-        return torch.from_numpy(audio_data).float()
 
 
 # ============================================================================
@@ -144,45 +86,6 @@ class TTSPlayer:
 
 
 # ============================================================================
-# Conversation State Management
-# ============================================================================
-
-@dataclass
-class ConversationState:
-    """Manages the state of the continuous conversation loop."""
-
-    # Audio buffers
-    buffer: list[torch.Tensor] = field(default_factory=list)
-    vad_buffer: torch.Tensor = field(
-        default_factory=lambda: torch.tensor([], dtype=torch.float32)
-    )
-
-    # VAD state
-    silence_counter: int = 0
-    vad: SileroVAD = field(
-        default_factory=lambda: SileroVAD(threshold=AudioConfig.VAD_THRESHOLD)
-    )
-
-    # Processing flags
-    is_processing: bool = False
-
-    def reset_buffer(self) -> None:
-        """Reset audio buffer and silence counter."""
-        self.buffer = []
-        self.silence_counter = 0
-
-    def has_sufficient_speech(self) -> bool:
-        """Check if buffer contains enough speech data."""
-        return len(self.buffer) >= (
-            AudioConfig.MIN_SPEECH_CHUNKS + AudioConfig.SILENCE_THRESHOLD_CHUNKS
-        )
-
-    def get_full_audio(self) -> torch.Tensor:
-        """Concatenate all buffered audio chunks."""
-        return torch.cat(self.buffer) if self.buffer else torch.tensor([])
-
-
-# ============================================================================
 # Main Stream Handler
 # ============================================================================
 
@@ -192,130 +95,106 @@ class AudioStreamHandler:
     def __init__(self, assistant: VoiceAssistant):
         self.assistant = assistant
         self.tts_player = TTSPlayer(assistant)
+        # Use shared VAD processor (DRY)
+        self.vad_processor = VADStreamProcessor()
+        # Track processing state to block input during playback
+        self.is_processing = False
 
     def process_stream(
         self,
         audio_chunk: tuple[int, np.ndarray] | None,
         history: list,
-        state: ConversationState,
-    ) -> Generator[tuple[list, str, ConversationState], None, None]:
+    ) -> Generator[tuple[list, str], None, None]:
         """
         Main streaming handler: VAD -> ASR -> LLM -> TTS pipeline.
 
         Yields:
-            Tuple of (chat_history, status_text, updated_state)
+            Tuple of (chat_history, status_text)
         """
         # Handle empty/None input
         if audio_chunk is None:
-            yield history, StatusIcon.INACTIVE.value, state
+            yield history, StatusIcon.INACTIVE.value
             return
-
-        # Initialize state if needed
-        if state is None:
-            state = ConversationState()
 
         # Block input during processing to prevent echo
-        if state.is_processing:
-            yield history, StatusIcon.SPEAKING.value, state
+        if self.is_processing:
+            yield history, StatusIcon.SPEAKING.value
             return
 
-        # Preprocess incoming audio
+        # 1. Normalize Input (Basic type conversion only)
+        # Resampling is now handled by the shared VADStreamProcessor
         sample_rate, audio_data = audio_chunk
-        chunk_tensor = AudioProcessor.preprocess(audio_data, sample_rate)
+        
+        # Normalize to float32
+        if audio_data.dtype == np.int16:
+            audio_data = audio_data.astype(np.float32) / 32768.0
+        elif audio_data.dtype == np.int32:
+            audio_data = audio_data.astype(np.float32) / 2147483648.0
+        
+        # Mono conversion
+        if len(audio_data.shape) > 1:
+            audio_data = audio_data.mean(axis=1)
 
-        # Process VAD and handle speech detection
-        yield from self._process_vad_loop(chunk_tensor, history, state)
+        chunk_tensor = torch.from_numpy(audio_data).float()
 
-    def _process_vad_loop(
-        self,
-        chunk_tensor: torch.Tensor,
-        history: list,
-        state: ConversationState,
-    ) -> Generator[tuple[list, str, ConversationState], None, None]:
-        """Process VAD in fixed-size windows."""
-        # Append to VAD buffer
-        state.vad_buffer = torch.cat([state.vad_buffer, chunk_tensor])
+        # 2. Process via Shared VAD Logic
+        state, full_audio = self.vad_processor.process(chunk_tensor, sample_rate)
 
-        processed_turn = False
-
-        # Process all available VAD windows
-        while state.vad_buffer.numel() >= AudioConfig.VAD_WINDOW_SIZE:
-            vad_chunk = state.vad_buffer[:AudioConfig.VAD_WINDOW_SIZE]
-            state.vad_buffer = state.vad_buffer[AudioConfig.VAD_WINDOW_SIZE:]
-
-            is_speech = state.vad.is_speech(vad_chunk)
-
-            if is_speech:
-                state.silence_counter = 0
-                state.buffer.append(vad_chunk)
-            elif len(state.buffer) > 0:
-                # Count silence only after speech has started
-                state.silence_counter += 1
-                state.buffer.append(vad_chunk)
-
-                # Check for end of speech
-                if state.silence_counter >= AudioConfig.SILENCE_THRESHOLD_CHUNKS:
-                    # Filter out short noise bursts
-                    if not state.has_sufficient_speech():
-                        state.reset_buffer()
-                        continue
-
-                    # Process the complete utterance
-                    yield from self._process_utterance(history, state)
-                    processed_turn = True
-                    break
-
-        # Update status if no turn was processed
-        if not processed_turn and not state.is_processing:
-            status = (StatusIcon.LISTENING.value if state.buffer
-                     else StatusIcon.WAITING.value)
-            yield history, status, state
+        # 3. Handle VAD State Changes
+        if state == StreamState.WAITING:
+            yield history, StatusIcon.WAITING.value
+            
+        elif state == StreamState.LISTENING:
+            yield history, StatusIcon.LISTENING.value
+            
+        elif state == StreamState.FINISHED and full_audio is not None:
+            # Utterance complete - Trigger Pipeline
+            yield from self._process_utterance(full_audio, history)
+            
+            # Reset for next turn
+            self.vad_processor.reset()
 
     def _process_utterance(
         self,
+        audio_tensor: torch.Tensor,
         history: list,
-        state: ConversationState,
-    ) -> Generator[tuple[list, str, ConversationState], None, None]:
+    ) -> Generator[tuple[list, str], None, None]:
         """Process a complete user utterance: ASR -> LLM -> TTS."""
-        state.is_processing = True
-        yield history, StatusIcon.THINKING.value, state
+        self.is_processing = True
+        yield history, StatusIcon.THINKING.value
 
         try:
             # Transcribe audio
-            full_audio = state.get_full_audio()
-            user_text = self.assistant.transcribe_audio(full_audio)
+            user_text = self.assistant.transcribe_audio(audio_tensor)
 
             if not user_text.strip():
                 return
 
             # Add user message to history
             history.append([user_text, None])
-            yield history, StatusIcon.THINKING.value, state
+            yield history, StatusIcon.THINKING.value
 
             # Stream LLM response with concurrent TTS
-            yield from self._stream_response(user_text, history, state)
+            yield from self._stream_response(user_text, history)
 
         except Exception as e:
             logger.error(f"Processing error: {e}")
-            yield history, StatusIcon.ERROR.value, state
+            yield history, StatusIcon.ERROR.value
 
         finally:
-            # Reset for next turn
-            state.reset_buffer()
-            state.is_processing = False
-            yield history, StatusIcon.LISTENING.value, state
+            self.is_processing = False
+            yield history, StatusIcon.WAITING.value
 
     def _stream_response(
         self,
         user_text: str,
         history: list,
-        state: ConversationState,
-    ) -> Generator[tuple[list, str, ConversationState], None, None]:
+    ) -> Generator[tuple[list, str], None, None]:
         """Stream LLM response with sentence-by-sentence TTS."""
         full_response = ""
         text_buffer = ""
 
-        yield history, StatusIcon.SPEAKING.value, state
+        yield history, StatusIcon.SPEAKING.value
 
         # Stream LLM chunks
         for chunk in self.assistant.get_response_stream(user_text):
@@ -327,14 +206,14 @@ class AudioStreamHandler:
 
             # Update UI
             history[-1][1] = full_response
-            yield history, StatusIcon.SPEAKING.value, state
+            yield history, StatusIcon.SPEAKING.value
 
         # Play any remaining text
         self.tts_player.play_remaining(text_buffer)
 
         # Final update
         history[-1][1] = full_response
-        yield history, StatusIcon.SPEAKING.value, state
+        yield history, StatusIcon.SPEAKING.value
 
 
 # ============================================================================
@@ -370,6 +249,7 @@ class VoiceAssistantApp:
             theme=gr.themes.Soft(primary_hue="indigo", neutral_hue="slate"),
             css=self._get_custom_css(),
         ) as demo:
+            # No persistent state needed in UI anymore, managed by handler class
             state = gr.State()
 
             # Create a fixed status label outside the main column so it stays mounted
@@ -408,13 +288,13 @@ class VoiceAssistantApp:
             # Wire up events - wrapper still yields HTML for the status element
             def process_with_html_status(*args):
                 """Wrapper to convert status text to HTML."""
-                for history, status, state in self.handler.process_stream(*args):
-                    yield history, f'<div class="status-display">{status}</div>', state
+                for history, status in self.handler.process_stream(*args):
+                    yield history, f'<div class="status-display">{status}</div>'
 
             audio_input.stream(
                 fn=process_with_html_status,
-                inputs=[audio_input, chatbot, state],
-                outputs=[chatbot, status_label, state],
+                inputs=[audio_input, chatbot],
+                outputs=[chatbot, status_label],
                 show_progress=False,
             )
 
