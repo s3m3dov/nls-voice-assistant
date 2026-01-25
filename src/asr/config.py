@@ -33,15 +33,15 @@ class ASRSettings(BaseSettings):
         description="Audio chunk size in samples",
     )
     pre_roll_chunks: int = Field(
-        default=10,
+        default=20,
         description="Number of chunks to keep before speech detection",
     )
     min_speech_chunks: int = Field(
-        default=8,
+        default=10,
         description="Minimum number of chunks to consider as speech",
     )
     silence_chunks_to_stop: int = Field(
-        default=30,
+        default=45,
         description="Number of silence chunks to stop recording",
     )
     max_recording_seconds: int = Field(
