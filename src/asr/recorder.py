@@ -3,7 +3,7 @@ import numpy as np
 import pyaudio
 import torch
 
-from src.asr.vad import SileroVAD
+from src.asr.stream import VADStreamProcessor, StreamState
 from src.config import settings
 
 # Audio constants
@@ -13,16 +13,11 @@ MAX_INT16 = 32768.0
 
 
 class VoiceRecorder:
-    """Records audio from a microphone with VAD-based start/stop."""
+    """Records audio from a microphone using the shared VADStreamProcessor."""
 
-    def __init__(self, vad_threshold: float = settings.asr.vad_threshold):
-        """
-        Initialize the voice recorder.
-
-        Args:
-            vad_threshold: Speech detection threshold (0.0-1.0).
-        """
-        self.vad = SileroVAD(threshold=vad_threshold)
+    def __init__(self):
+        """Initialize the voice recorder."""
+        self.processor = VADStreamProcessor()
         self.sample_rate = settings.asr.sample_rate
         self._pyaudio: pyaudio.PyAudio | None = None
         self._stream: pyaudio.Stream | None = None
@@ -52,67 +47,37 @@ class VoiceRecorder:
     def _read_chunk(self) -> torch.Tensor:
         """Read and convert one audio chunk from microphone."""
         assert self._stream is not None
+        # PyAudio reads bytes
         data = self._stream.read(settings.asr.chunk_samples, exception_on_overflow=False)
-        # Convert int16 to float32 tensor
+        # Convert int16 bytes to a numpy array
         audio_int16 = np.frombuffer(data, dtype=np.int16)
         audio_float = audio_int16.astype(np.float32) / MAX_INT16
         return torch.from_numpy(audio_float)
 
     def record_until_silence(self) -> torch.Tensor:
         """
-        Record audio from microphone until silence is detected.
-
-        Waits for speech to begin, then records until silence.
+        Record audio from the microphone until silence is detected.
+        Delegates VAD logic to the shared VADStreamProcessor.
 
         Returns:
             Audio tensor (16kHz, mono, float32, normalized to [-1, 1]).
         """
         self._init_audio()
-        self.vad.reset()
+        self.processor.reset()
 
-        pre_roll_buffer: list[torch.Tensor] = []
-        recorded_chunks: list[torch.Tensor] = []
-        is_recording = False
-        speech_chunk_count = 0
-        silence_chunk_count = 0
         max_chunks = int(settings.asr.max_recording_seconds * self.sample_rate / settings.asr.chunk_samples)
 
         try:
             for _ in range(max_chunks):
                 chunk = self._read_chunk()
+                
+                # Feed chunk to the processor
+                state, result_audio = self.processor.process(chunk, self.sample_rate)
 
-                if not is_recording:
-                    # Waiting for speech - maintain pre-roll buffer
-                    pre_roll_buffer.append(chunk)
-                    if len(pre_roll_buffer) > settings.asr.pre_roll_chunks:
-                        pre_roll_buffer.pop(0)
+                if state == StreamState.FINISHED and result_audio is not None:
+                    return result_audio
 
-                    if self.vad.is_speech(chunk):
-                        speech_chunk_count += 1
-                        if speech_chunk_count >= 2:  # Confirm speech
-                            is_recording = True
-                            recorded_chunks = list(pre_roll_buffer)
-                            recorded_chunks.append(chunk)
-                    else:
-                        speech_chunk_count = 0
-                else:
-                    # Recording speech
-                    recorded_chunks.append(chunk)
-
-                    if self.vad.is_speech(chunk):
-                        silence_chunk_count = 0
-                    else:
-                        silence_chunk_count += 1
-                        if silence_chunk_count >= settings.asr.silence_chunks_to_stop:
-                            # Check we have enough speech
-                            if len(recorded_chunks) >= settings.asr.min_speech_chunks:
-                                break
-                            # Not enough speech, keep waiting
-                            silence_chunk_count = 0
-
-            # Combine all chunks
-            if recorded_chunks:
-                return torch.cat(recorded_chunks)
+            # Timeout reached without valid speech segment
             return torch.tensor([], dtype=torch.float32)
 
         finally:

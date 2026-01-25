@@ -22,7 +22,7 @@ def run() -> None:
     assistant.initialize()
 
     # Initialize CLI-specific components (voice recorder)
-    recorder = VoiceRecorder(vad_threshold=settings.asr.vad_threshold)
+    recorder = VoiceRecorder()
     logger.info("Voice Assistant is ready!")
 
     # Assistant speaks first with a greeting
