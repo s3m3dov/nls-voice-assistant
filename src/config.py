@@ -19,7 +19,7 @@ class Settings(BaseSettings):
 
     # ASR settings (nested)
     asr: ASRSettings = ASRSettings(
-        model_name="small",
+        model_name="medium",
     )
 
     # TTS settings (nested)
