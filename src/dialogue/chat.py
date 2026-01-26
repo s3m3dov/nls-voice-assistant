@@ -44,6 +44,30 @@ def build_system_prompt() -> str:
         """
 
 
+def normalize_dates_with_llm(user_input: str) -> str:
+    """
+    Rewrite user input by replacing relative dates (today, tomorrow, weekdays)
+    with concrete YYYY-MM-DD dates using current context.
+    """
+    system = {
+        "role": "system",
+        "content": build_system_prompt() + """
+        Rewrite the user's message by replacing any relative dates
+        (today, tomorrow, weekdays) with exact YYYY-MM-DD dates.
+        Return ONLY the rewritten user sentence.
+        Do not add explanations.
+        """
+    }
+
+    resp = chat(
+        model=settings.dialogue.llm_model,
+        messages=[system, {"role": "user", "content": user_input}],
+    )
+
+    text = resp.message.content.strip()
+    return text if text else user_input
+
+
 def _execute_tool(tool_name: str, tool_args: dict) -> str:
     """Execute a tool by name and return the result."""
     if tool_name not in TOOL_REGISTRY:
@@ -75,8 +99,9 @@ def chat_stream(user_input: str, messages: list) -> Generator[str, None, None]:
     Yields:
         Chunks of the assistant's response.
     """
-    messages.append({"role": "user", "content": user_input})
-
+    #messages.append({"role": "user", "content": user_input})
+    normalized_input = normalize_dates_with_llm(user_input)
+    messages.append({"role": "user", "content": normalized_input})
     while True:
         full_content = ""
         tool_calls = []
