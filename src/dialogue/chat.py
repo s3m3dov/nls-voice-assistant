@@ -32,10 +32,13 @@ def build_system_prompt() -> str:
         - Provide weather information for any location (7-day forecast)
         - Manage calendar events (list, create, update, delete appointments)
         
-        Be concise and natural in your responses. When you need weather or calendar data,
-        use the available tools. These tools provide the most accurate information.
-        
-        For general questions, respond directly.
+        Instructions:
+        1. Always convert any relative dates in the user input (e.g., "today", "tomorrow", "next Monday", "Friday") 
+           into full calendar dates in the format: Month Day, Year. For example, "today" -> "January 23, 2026".
+        2. Never use relative terms like "today", "tomorrow", "yesterday", or weekdays in your output.
+        3. Be concise and natural in your responses.
+        4. When you need weather or calendar data, use the available tools.
+        5. For general questions, respond directly.
         
         Current date: {today_text}
         
@@ -43,17 +46,19 @@ def build_system_prompt() -> str:
         {week_calendar}
         """
 
-
 def normalize_dates_with_llm(user_input: str) -> str:
     """
     Rewrite user input by replacing relative dates (today, tomorrow, weekdays)
-    with concrete YYYY-MM-DD dates using current context.
+    with full natural calendar dates in the format: Month Day, Year.
+    Example: "today" -> "January 23, 2026"
     """
     system = {
         "role": "system",
         "content": build_system_prompt() + """
         Rewrite the user's message by replacing any relative dates
-        (today, tomorrow, weekdays) with exact YYYY-MM-DD dates.
+        (today, tomorrow, weekdays, next Monday, Friday, etc.)
+        with full calendar dates in the natural format: Month Day, Year.
+        Example: "today" -> "January 23, 2026"
         Return ONLY the rewritten user sentence.
         Do not add explanations.
         """
@@ -66,6 +71,8 @@ def normalize_dates_with_llm(user_input: str) -> str:
 
     text = resp.message.content.strip()
     return text if text else user_input
+
+
 
 
 def _execute_tool(tool_name: str, tool_args: dict) -> str:
@@ -85,6 +92,8 @@ def _process_tool_calls(tool_calls: list, messages: list) -> None:
             tool_call.function.name,
             tool_call.function.arguments,
         )
+        # Post-process to make all dates voice-friendly
+
         messages.append({"role": "tool", "content": result})
 
 
@@ -100,8 +109,8 @@ def chat_stream(user_input: str, messages: list) -> Generator[str, None, None]:
         Chunks of the assistant's response.
     """
     #messages.append({"role": "user", "content": user_input})
-    normalized_input = normalize_dates_with_llm(user_input)
-    messages.append({"role": "user", "content": normalized_input})
+    result = normalize_dates_with_llm(user_input)
+    messages.append({"role": "user", "content": result})
     while True:
         full_content = ""
         tool_calls = []
