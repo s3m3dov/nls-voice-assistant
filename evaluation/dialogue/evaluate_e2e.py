@@ -129,12 +129,13 @@ def _validate_calendar_delete(output_text: str, expected_event_id: int | None) -
     return True, ""
 
 
-def run_evaluation(test_cases_path: str) -> None:
+def run_evaluation(test_cases_path: str, *, print_results: bool = True) -> Dict[str, Any]:
     cases = load_test_cases(test_cases_path)
     calendar_client = CalendarClient(settings.api)
     results = []
 
-    print(f"Running end-to-end evaluation on {len(cases)} test cases...\n")
+    if print_results:
+        print(f"Running end-to-end evaluation on {len(cases)} test cases...\n")
 
     passed_count = 0
     tool_expected = 0
@@ -151,8 +152,9 @@ def run_evaluation(test_cases_path: str) -> None:
         if expected_tool:
             tool_expected += 1
 
-        print(f"Test Case: {case_id}")
-        print(f"Input: {user_input}")
+        if print_results:
+            print(f"Test Case: {case_id}")
+            print(f"Input: {user_input}")
 
         messages = [{"role": "system", "content": build_system_prompt()}]
         response_text = ""
@@ -160,9 +162,11 @@ def run_evaluation(test_cases_path: str) -> None:
             for chunk in chat_stream(user_input, messages):
                 response_text += chunk
         except Exception as e:
-            print(f"Error during execution: {e}")
+            if print_results:
+                print(f"Error during execution: {e}")
             results.append({"id": case_id, "status": "error", "error": str(e)})
-            print("-" * 40)
+            if print_results:
+                print("-" * 40)
             continue
 
         tool_calls_found = []
@@ -183,7 +187,8 @@ def run_evaluation(test_cases_path: str) -> None:
             if expected_tool is None:
                 success = True
             else:
-                print(f"Expected tool '{expected_tool}', but no tool was called.")
+                if print_results:
+                    print(f"Expected tool '{expected_tool}', but no tool was called.")
         else:
             first_call = tool_calls_found[0]
             actual_tool = first_call["function"]["name"]
@@ -193,7 +198,8 @@ def run_evaluation(test_cases_path: str) -> None:
                 if actual_tool == expected_tool:
                     tool_correct += 1
                 else:
-                    print(f"Wrong tool called. Expected '{expected_tool}', got '{actual_tool}'")
+                    if print_results:
+                        print(f"Wrong tool called. Expected '{expected_tool}', got '{actual_tool}'")
 
         # E2E validation only if tool matches
         if expected_tool and actual_tool == expected_tool:
@@ -230,13 +236,16 @@ def run_evaluation(test_cases_path: str) -> None:
                 success = True
                 task_success += 1
             else:
-                print(f"E2E validation failed: {e2e_error}")
+                if print_results:
+                    print(f"E2E validation failed: {e2e_error}")
 
         if success:
-            print("PASS")
+            if print_results:
+                print("PASS")
             passed_count += 1
         else:
-            print("FAIL")
+            if print_results:
+                print("FAIL")
 
         results.append({
             "id": case_id,
@@ -245,19 +254,39 @@ def run_evaluation(test_cases_path: str) -> None:
             "actual_args": actual_args,
         })
 
-        print("-" * 40)
+        if print_results:
+            print("-" * 40)
 
     accuracy = (passed_count / len(cases)) * 100 if cases else 0.0
     tool_accuracy = (tool_correct / tool_expected) * 100 if tool_expected else 0.0
     task_success_rate = (task_success / tool_expected) * 100 if tool_expected else 0.0
 
-    print("\nEvaluation Complete.")
-    print(f"Overall Accuracy: {accuracy:.1f}% ({passed_count}/{len(cases)})")
-    if tool_expected:
-        print(f"Tool Accuracy: {tool_accuracy:.1f}% ({tool_correct}/{tool_expected})")
-        print(f"Task Success: {task_success_rate:.1f}% ({task_success}/{tool_expected})")
+    if print_results:
+        print("\nEvaluation Complete.")
+        print(f"Overall Accuracy: {accuracy:.1f}% ({passed_count}/{len(cases)})")
+        if tool_expected:
+            print(f"Tool Accuracy: {tool_accuracy:.1f}% ({tool_correct}/{tool_expected})")
+            print(f"Task Success: {task_success_rate:.1f}% ({task_success}/{tool_expected})")
+
+    return {
+        "total": len(cases),
+        "passed": passed_count,
+        "accuracy": accuracy,
+        "tool_expected": tool_expected,
+        "tool_correct": tool_correct,
+        "tool_accuracy": tool_accuracy,
+        "task_success": task_success,
+        "task_success_rate": task_success_rate,
+        "results": results,
+    }
 
 
 if __name__ == "__main__":
-    test_file = Path(__file__).parent / "test_cases_e2e.json"
-    run_evaluation(str(test_file))
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Run end-to-end dialogue evaluation.")
+    parser.add_argument("--test-cases", default=str(Path(__file__).parent / "test_cases_e2e.json"))
+    parser.add_argument("--quiet", action="store_true", help="Print only summary metrics.")
+    args = parser.parse_args()
+
+    run_evaluation(args.test_cases, print_results=not args.quiet)

@@ -45,5 +45,73 @@
     "expected_args": {
       "event_id": 5
     }
+  },
+  {
+    "id": "weather_general_paris",
+    "input": "What's the 7-day forecast for Paris?",
+    "expected_tool": "get_weather_forecast",
+    "expected_args": {
+      "place": "Paris"
+    }
+  },
+  {
+    "id": "weather_day_sunday",
+    "input": "Is it sunny in Munich on Sunday?",
+    "expected_tool": "get_weather_for_day",
+    "expected_args": {
+      "place": "Munich",
+      "day": "sunday"
+    }
+  },
+  {
+    "id": "weather_today_cologne",
+    "input": "Weather today in Cologne.",
+    "expected_tool": "get_weather_for_today",
+    "expected_args": {
+      "place": "Cologne"
+    }
+  },
+  {
+    "id": "calendar_create_location",
+    "input": "Book a team sync tomorrow at 2 PM in the Berlin office.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "team sync"
+    }
+  },
+  {
+    "id": "calendar_update_time",
+    "input": "Reschedule event 12 to next Monday at 3 PM.",
+    "expected_tool": "update_calendar_event",
+    "expected_args_contains": {
+      "event_id": 12
+    }
+  },
+  {
+    "id": "calendar_get_event",
+    "input": "What's on event 7?",
+    "expected_tool": "get_calendar_event",
+    "expected_args": {
+      "event_id": 7
+    }
+  },
+  {
+    "id": "calendar_list_upcoming",
+    "input": "Show my upcoming appointments.",
+    "expected_tool": "list_calendar_events",
+    "expected_args": {}
+  },
+  {
+    "id": "calendar_delete_alt",
+    "input": "Remove calendar event 42.",
+    "expected_tool": "delete_calendar_event",
+    "expected_args": {
+      "event_id": 42
+    }
+  },
+  {
+    "id": "general_question_no_tool",
+    "input": "Who wrote The Hobbit?",
+    "expected_tool": null
   }
 ]
