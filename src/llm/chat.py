@@ -56,7 +56,8 @@ def build_system_prompt() -> str:
         For general questions, respond directly.
         
         Read dates in this format:
-        2026-01-13 -> 13 January 2026
+        2026-01-13 14:00 -> 13 January 2026, 14 oclock
+        2026-06-27 20:30 -> 13 January 2026, half past 20
         Reference of months: {_build_month_to_name_context()}
         
         Current date: {today_text}
