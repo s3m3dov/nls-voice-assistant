@@ -89,5 +89,8 @@ ENV PYTHONUNBUFFERED=1
 # Ollama host - connects to the ollama service in docker-compose
 ENV OLLAMA_HOST=http://ollama:11434
 
+# Expose Web UI port
+EXPOSE 7860
+
 # Default command
 CMD ["python", "src/main.py"]
