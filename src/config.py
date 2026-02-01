@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings
 
 from src.api.config import APISettings
 from src.asr.config import ASRSettings
-from src.dialogue.config import DialogueSettings
+from src.llm.config import DialogueSettings
 from src.tts.config import TTSSettings
 from src.interface.ui.config import UISettings
 
