@@ -98,7 +98,8 @@ class CalendarClient:
             if data is None:
                 return None
             if isinstance(data, dict):
-                return CalendarEventResponse.model_validate(data)
+                event = CalendarEventResponse.model_validate(data)
+                return event if event.id is not None else None
             return None
         except requests.exceptions.RequestException as e:
             raise CalendarAPIError(f"Request failed: {e}") from e
@@ -126,7 +127,8 @@ class CalendarClient:
             if data is None:
                 return None
             if isinstance(data, dict):
-                return CalendarEventResponse.model_validate(data)
+                event = CalendarEventResponse.model_validate(data)
+                return event if event.id is not None else None
             return None
         except requests.exceptions.RequestException as e:
             raise CalendarAPIError(f"Request failed: {e}") from e
@@ -148,9 +150,19 @@ class CalendarClient:
             CalendarAPIError: If the API request fails.
         """
         if isinstance(updates, CalendarEventUpdateRequest):
-            data = updates.to_dict()
+            update_data = updates.to_dict()
         else:
-            data = updates
+            update_data = updates
+
+        # Fetch existing event first to ensure we don't wipe fields
+        existing_event = self.get_event(event_id)
+        if existing_event is None:
+            return None
+
+        # Merge updates into existing data
+        data = existing_event.model_dump()
+        data.pop("id", None)  # Don't send ID in body
+        data.update(update_data)
 
         try:
             response = self._session.put(
@@ -159,11 +171,16 @@ class CalendarClient:
                 timeout=self.settings.request_timeout,
             )
             result = self._handle_response(response)
-            if result is None:
-                return None
+            
+            # Check if response contains the event
             if isinstance(result, dict):
-                return CalendarEventResponse.model_validate(result)
-            return None
+                event = CalendarEventResponse.model_validate(result)
+                if event.id is not None:
+                    return event
+            
+            # Fallback: fetch the updated event
+            return self.get_event(event_id)
+            
         except requests.exceptions.RequestException as e:
             raise CalendarAPIError(f"Request failed: {e}") from e
 
