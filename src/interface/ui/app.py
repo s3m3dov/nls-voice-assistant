@@ -22,7 +22,6 @@ from src.assistant import VoiceAssistant
 from src.asr.stream import VADStreamProcessor, StreamState
 from src.logger import logger, setup_logging
 from src.interface.ui.config import UISettings
-from src.tts.audio_player import play_samples
 from src.tts.sanitizer import sanitize_for_tts
 
 
@@ -40,49 +39,58 @@ class StatusIcon(str, Enum):
 
 
 # ============================================================================
-# TTS Playback
+# TTS Buffering & Synthesis
 # ============================================================================
 
-class TTSPlayer:
-    """Handles text-to-speech playback with sentence buffering."""
+class TTSBuffer:
+    """Handles text-to-speech buffering and synthesis for streaming."""
 
     def __init__(self, assistant: VoiceAssistant):
         self.assistant = assistant
 
-    def play_sentence_buffer(self, text_buffer: str) -> str:
+    def process_buffer(self, text_buffer: str) -> tuple[str, list[tuple[int, np.ndarray]]]:
         """
-        Synthesize and play complete sentences from buffer.
-        Returns remaining incomplete text.
+        Synthesize complete sentences from buffer.
+        Returns (remaining_text, list_of_audio_chunks).
         """
+        audio_chunks = []
         if not text_buffer.strip():
-            return text_buffer
+            return text_buffer, audio_chunks
 
         sentences = SENTENCE_SPLIT_RE.split(text_buffer)
 
-        # Play all complete sentences (all but last)
+        # Process all complete sentences (all but last)
         if len(sentences) > 1:
             for sentence in sentences[:-1]:
-                self._play_text(sentence.strip())
-            return sentences[-1]
+                chunk = self._synthesize_text(sentence.strip())
+                if chunk:
+                    audio_chunks.append(chunk)
+            return sentences[-1], audio_chunks
 
-        return text_buffer
+        return text_buffer, audio_chunks
 
-    def play_remaining(self, text_buffer: str) -> None:
-        """Play any remaining text in buffer."""
+    def process_remaining(self, text_buffer: str) -> list[tuple[int, np.ndarray]]:
+        """Synthesize any remaining text in buffer."""
+        audio_chunks = []
         if text_buffer.strip():
-            self._play_text(text_buffer.strip())
+            chunk = self._synthesize_text(text_buffer.strip())
+            if chunk:
+                audio_chunks.append(chunk)
+        return audio_chunks
 
-    def _play_text(self, text: str) -> None:
-        """Synthesize and play a single text segment."""
+    def _synthesize_text(self, text: str) -> tuple[int, np.ndarray] | None:
+        """Synthesize a single text segment."""
         clean_text = sanitize_for_tts(text)
         if not clean_text:
-            return
+            return None
 
         try:
             samples, sample_rate = self.assistant.synthesize_speech(clean_text)
-            play_samples(samples, sample_rate)
+            # Gradio expects (sample_rate, numpy_array)
+            return (sample_rate, samples)
         except Exception as e:
-            logger.error(f"TTS playback error: {e}")
+            logger.error(f"TTS synthesis error: {e}")
+            return None
 
 
 # ============================================================================
@@ -94,7 +102,7 @@ class AudioStreamHandler:
 
     def __init__(self, assistant: VoiceAssistant):
         self.assistant = assistant
-        self.tts_player = TTSPlayer(assistant)
+        self.tts = TTSBuffer(assistant)
         # Use shared VAD processor (DRY)
         self.vad_processor = VADStreamProcessor()
         # Track processing state to block input during playback
@@ -104,21 +112,21 @@ class AudioStreamHandler:
         self,
         audio_chunk: tuple[int, np.ndarray] | None,
         history: list,
-    ) -> Generator[tuple[list, str], None, None]:
+    ) -> Generator[tuple[list, str, tuple[int, np.ndarray] | None], None, None]:
         """
         Main streaming handler: VAD -> ASR -> LLM -> TTS pipeline.
 
         Yields:
-            Tuple of (chat_history, status_text)
+            Tuple of (chat_history, status_text, audio_output)
         """
         # Handle empty/None input
         if audio_chunk is None:
-            yield history, StatusIcon.INACTIVE.value
+            yield history, StatusIcon.INACTIVE.value, None
             return
 
         # Block input during processing to prevent echo
         if self.is_processing:
-            yield history, StatusIcon.SPEAKING.value
+            yield history, StatusIcon.SPEAKING.value, None
             return
 
         # 1. Normalize Input (Basic type conversion only)
@@ -142,10 +150,10 @@ class AudioStreamHandler:
 
         # 3. Handle VAD State Changes
         if state == StreamState.WAITING:
-            yield history, StatusIcon.WAITING.value
+            yield history, StatusIcon.WAITING.value, None
             
         elif state == StreamState.LISTENING:
-            yield history, StatusIcon.LISTENING.value
+            yield history, StatusIcon.LISTENING.value, None
             
         elif state == StreamState.FINISHED and full_audio is not None:
             # Utterance complete - Trigger Pipeline
@@ -158,10 +166,10 @@ class AudioStreamHandler:
         self,
         audio_tensor: torch.Tensor,
         history: list,
-    ) -> Generator[tuple[list, str], None, None]:
+    ) -> Generator[tuple[list, str, tuple[int, np.ndarray] | None], None, None]:
         """Process a complete user utterance: ASR -> LLM -> TTS."""
         self.is_processing = True
-        yield history, StatusIcon.THINKING.value
+        yield history, StatusIcon.THINKING.value, None
 
         try:
             # Transcribe audio
@@ -172,48 +180,59 @@ class AudioStreamHandler:
 
             # Add user message to history
             history.append([user_text, None])
-            yield history, StatusIcon.THINKING.value
+            yield history, StatusIcon.THINKING.value, None
 
             # Stream LLM response with concurrent TTS
             yield from self._stream_response(user_text, history)
 
         except Exception as e:
             logger.error(f"Processing error: {e}")
-            yield history, StatusIcon.ERROR.value
+            yield history, StatusIcon.ERROR.value, None
 
         finally:
             self.is_processing = False
-            yield history, StatusIcon.WAITING.value
+            yield history, StatusIcon.WAITING.value, None
 
     def _stream_response(
         self,
         user_text: str,
         history: list,
-    ) -> Generator[tuple[list, str], None, None]:
+    ) -> Generator[tuple[list, str, tuple[int, np.ndarray] | None], None, None]:
         """Stream LLM response with sentence-by-sentence TTS."""
         full_response = ""
         text_buffer = ""
 
-        yield history, StatusIcon.SPEAKING.value
+        yield history, StatusIcon.SPEAKING.value, None
 
         # Stream LLM chunks
         for chunk in self.assistant.get_response_stream(user_text):
             full_response += chunk
             text_buffer += chunk
 
-            # Play completed sentences
-            text_buffer = self.tts_player.play_sentence_buffer(text_buffer)
+            # Process buffer for complete sentences
+            text_buffer, audio_chunks = self.tts.process_buffer(text_buffer)
 
             # Update UI
             history[-1][1] = full_response
-            yield history, StatusIcon.SPEAKING.value
+            
+            # Yield any generated audio chunks
+            if audio_chunks:
+                for audio_chunk in audio_chunks:
+                    yield history, StatusIcon.SPEAKING.value, audio_chunk
+            else:
+                yield history, StatusIcon.SPEAKING.value, None
 
         # Play any remaining text
-        self.tts_player.play_remaining(text_buffer)
-
+        audio_chunks = self.tts.process_remaining(text_buffer)
+        
         # Final update
         history[-1][1] = full_response
-        yield history, StatusIcon.SPEAKING.value
+        
+        if audio_chunks:
+            for audio_chunk in audio_chunks:
+                yield history, StatusIcon.SPEAKING.value, audio_chunk
+        else:
+            yield history, StatusIcon.SPEAKING.value, None
 
 
 # ============================================================================
@@ -281,20 +300,29 @@ class VoiceAssistantApp:
                     label="Microphone Stream",
                     show_label=False,
                 )
+                
+                # Hidden audio output component for browser playback
+                audio_output = gr.Audio(
+                    label="Assistant Voice",
+                    type="numpy",
+                    streaming=True,
+                    autoplay=True,
+                    visible=False,
+                )
 
                 with gr.Accordion("Controls", open=False):
                     clear_btn = gr.Button("Clear Chat", variant="secondary")
 
-            # Wire up events - wrapper still yields HTML for the status element
+            # Wire up events
             def process_with_html_status(*args):
-                """Wrapper to convert status text to HTML."""
-                for history, status in self.handler.process_stream(*args):
-                    yield history, f'<div class="status-display">{status}</div>'
+                """Wrapper to convert status text to HTML and pass through audio."""
+                for history, status, audio_chunk in self.handler.process_stream(*args):
+                    yield history, f'<div class="status-display">{status}</div>', audio_chunk
 
             audio_input.stream(
                 fn=process_with_html_status,
                 inputs=[audio_input, chatbot],
-                outputs=[chatbot, status_label],
+                outputs=[chatbot, status_label, audio_output],
                 show_progress=False,
             )
 
