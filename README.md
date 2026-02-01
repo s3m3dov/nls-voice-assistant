@@ -82,15 +82,13 @@ The system must handle commands such as:
 
 ### Prerequisites
 
-- Python 3.9 or higher
+- Python 3.12 or higher
 - Docker
 - Git
 
 ### Installation
 
-Choose one of the following package managers based on your preference:
-
-#### Option 1: Using UV (Fastest & Recommended)
+This project uses `uv` for dependency management.
 
 **Install UV**
 
@@ -136,178 +134,14 @@ powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 git clone https://github.com/s3m3dov/nls-voice-assistant.git
 cd nls-voice-assistant
 
-# Create virtual environment and install dependencies
-uv venv
-uv pip install -r requirements.txt
+# Create virtual environment and install dependencies (from `uv.lock`)
+uv sync
 
-# Activate the virtual environment
-# macOS/Linux:
-source .venv/bin/activate
-# Windows (Command Prompt):
-.venv\Scripts\activate.bat
-# Windows (PowerShell):
-.venv\Scripts\Activate.ps1
+# Run the application (CLI mode is the default)
+uv run python -m src.main --mode cli
 
-# Run the application
-python src/main.py
-```
-
-#### Option 2: Using Poetry
-
-**Install Poetry**
-
-<details>
-<summary>macOS</summary>
-
-**Via Homebrew (Recommended):**
-
-```bash
-brew install poetry
-```
-
-**Via Official Installer:**
-
-```bash
-curl -sSL https://install.python-poetry.org | python3 -
-```
-
-Add Poetry to your PATH (add to `~/.zshrc` or `~/.bash_profile`):
-
-```bash
-export PATH="$HOME/.local/bin:$PATH"
-```
-
-</details>
-
-<details>
-<summary>Linux</summary>
-
-```bash
-curl -sSL https://install.python-poetry.org | python3 -
-```
-
-Add Poetry to your PATH (add to `~/.bashrc` or `~/.zshrc`):
-
-```bash
-export PATH="$HOME/.local/bin:$PATH"
-```
-
-</details>
-
-<details>
-<summary>Windows (PowerShell)</summary>
-
-```powershell
-(Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -
-```
-
-Add Poetry to your PATH through System Environment Variables or add to PowerShell profile.
-</details>
-
-**Setup Project**
-
-```bash
-# Clone the repository
-git clone https://github.com/s3m3dov/nls-voice-assistant.git
-cd nls-voice-assistant
-
-# Install dependencies
-poetry install
-
-# Activate the virtual environment
-poetry shell
-
-# Run the application
-poetry run python src/main.py
-```
-
-#### Option 3: Using venv (Built-in)
-
-<details>
-<summary>macOS/Linux</summary>
-
-```bash
-# Clone the repository
-git clone https://github.com/s3m3dov/nls-voice-assistant.git
-cd nls-voice-assistant
-
-# Create virtual environment
-python3 -m venv venv
-
-# Activate virtual environment
-source venv/bin/activate
-
-# Upgrade pip
-pip install --upgrade pip
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the application
-python src/main.py
-```
-
-</details>
-
-<details>
-<summary>Windows (Command Prompt)</summary>
-
-```cmd
-# Clone the repository
-git clone https://github.com/s3m3dov/nls-voice-assistant.git
-cd nls-voice-assistant
-
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-venv\Scripts\activate.bat
-
-# Upgrade pip
-python -m pip install --upgrade pip
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the application
-python src/main.py
-```
-
-</details>
-
-<details>
-<summary>Windows (PowerShell)</summary>
-
-```powershell
-# Clone the repository
-git clone https://github.com/s3m3dov/nls-voice-assistant.git
-cd nls-voice-assistant
-
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment (may need to enable script execution first)
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-venv\Scripts\Activate.ps1
-
-# Upgrade pip
-python -m pip install --upgrade pip
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the application
-python src/main.py
-```
-
-</details>
-
-### Deactivating Virtual Environment
-
-For all options, simply run:
-
-```bash
-deactivate
+# Run the application (Web UI via Gradio)
+uv run python -m src.main --mode web
 ```
 
 ### Running the Application
@@ -315,7 +149,12 @@ deactivate
 #### Local Development
 
 ```bash
-python src/main.py
+# CLI mode (default)
+uv run python -m src.main --mode cli
+
+# Web UI (Gradio)
+uv run python -m src.main --mode web
+# Then open http://localhost:7860
 ```
 
 #### Docker Container
@@ -420,21 +259,8 @@ The final evaluation report (max 2 pages + title sheet) will include:
 - Results analysis
 - Limitations and future improvements
 
-## Troubleshooting
-
-### Common Issues
-
-- [To be added as issues arise]
-
 ## Resources
 
 - [University of Marburg NLP Group](https://www.uni-marburg.de/)
 - Project API Documentation: <https://api.responsible-nlp.net/>
 - GitHub Repository: <https://github.com/s3m3dov/nls-voice-assistant>
-
-## Contact
-
-For questions regarding the project, contact:
-
-- Course Instructor: Daniel Braun
-- Teaching Assistant: Lucas Fonseca Lage
