@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings
 
 from src.api.config import APISettings
 from src.asr.config import ASRSettings
-from src.llm.config import DialogueSettings
+from src.llm.config import LLMSettings
 from src.tts.config import TTSSettings
 from src.interface.ui.config import UISettings
 
@@ -30,8 +30,8 @@ class Settings(BaseSettings):
     )
 
     # Dialogue settings (nested)
-    dialogue: DialogueSettings = DialogueSettings(
-        llm_model="qwen2.5:7b-instruct"
+    llm: LLMSettings = LLMSettings(
+        model="qwen2.5:7b-instruct"
     )
 
     # UI settings (nested)

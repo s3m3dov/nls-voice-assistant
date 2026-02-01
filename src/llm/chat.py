@@ -82,7 +82,7 @@ def chat_stream(user_input: str, messages: list) -> Generator[str, None, None]:
         tool_calls = []
 
         # Stream response
-        for chunk in chat(model=settings.dialogue.llm_model, messages=messages, tools=TOOLS, stream=True):
+        for chunk in chat(model=settings.llm.model, messages=messages, tools=TOOLS, stream=True):
             if chunk.message.content:
                 full_content += chunk.message.content
                 yield chunk.message.content

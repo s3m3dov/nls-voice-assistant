@@ -3,8 +3,8 @@ from pydantic import Field
 from pydantic_settings import BaseSettings
 
 
-class DialogueSettings(BaseSettings):
+class LLMSettings(BaseSettings):
     """Dialogue configuration settings."""
 
     # Model configuration
-    llm_model: str = Field(description="Ollama model tag to use for chat")
+    model: str = Field(description="Ollama model tag to use for chat")
