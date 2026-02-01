@@ -93,11 +93,11 @@ def get_calendar_event(event_id: int) -> str:
 def create_calendar_event(
         title: str,
         start_time: str,
-        end_time: str = None,
-        description: str = None,
-        location: str = None,
+        end_time: Optional[str] = None,
+        description: Optional[str] = None,
+        location: Optional[str] = None,
 ) -> str:
-    """Create a new calendar event/appointment.
+    """Create a new calendar event/appointment.§
 
     Args:
         title: Title or name of the event (e.g., 'Team Meeting', 'Doctor Appointment') - Required
