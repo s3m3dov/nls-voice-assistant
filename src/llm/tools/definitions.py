@@ -1,8 +1,7 @@
-import json
 from typing import Optional
 
 from src.api.calendar.client import CalendarClient
-from src.api.calendar.schema import CalendarEventCreateRequest, CalendarEventUpdateRequest
+from src.api.calendar.schema import CalendarEventCreateRequest, CalendarEventUpdateRequest, CalendarDateRequest
 from src.api.weather.client import WeatherClient
 from src.config import settings
 from src.logger import logger
@@ -104,8 +103,8 @@ def create_calendar_event(
         title: Title or name of the event (e.g., 'Team Meeting', 'Doctor Appointment') - Required
         start_time: Start time in ISO format (e.g., '2025-01-20T14:00') - Required
         end_time: End time in ISO format (e.g., '2025-01-20T15:00') - Optional
-        description: Optional description or notes for the event. - Optional
-        location: Optional location where the event takes place. - Required
+        description: Description or notes for the event. - Optional
+        location: Location where the event takes place. - Required
 
     Returns:
         JSON string with the created event including its assigned ID.
@@ -194,6 +193,46 @@ def delete_all_calendar_events() -> str:
     """
     logger.info("[delete_all_calendar_events] Input: (none)")
     summary = _calendar_client.delete_all_events()
-    output = json.dumps(summary)
+    output = summary.model_dump_json()
     logger.info(f"[delete_all_calendar_events] Output: {output}")
+    return output
+
+
+def get_calendar_events_for_date(date: str) -> str:
+    """Get calendar events for a specific date.
+
+    Args:
+        date: Date in YYYY-MM-DD format.
+
+    Returns:
+        JSON array of events on that date.
+    """
+    logger.info(f"[get_calendar_events_for_date] Input: date={date}")
+    try:
+        request = CalendarDateRequest(date=date)
+        events = _calendar_client.get_events_by_date(request)
+        output = "[" + ", ".join(e.model_dump_json() for e in events) + "]"
+    except Exception as e:
+        output = f"Error: {e}"
+    logger.info(f"[get_calendar_events_for_date] Output: {output}")
+    return output
+
+
+def delete_calendar_events_for_date(date: str) -> str:
+    """Delete all calendar events on a specific date.
+
+    Args:
+        date: Date in YYYY-MM-DD format.
+
+    Returns:
+        JSON string with deletion summary.
+    """
+    logger.info(f"[delete_calendar_events_for_date] Input: date={date}")
+    try:
+        request = CalendarDateRequest(date=date)
+        summary = _calendar_client.delete_events_by_date(request)
+        output = summary.model_dump_json()
+    except Exception as e:
+        output = f"Error: {e}"
+    logger.info(f"[delete_calendar_events_for_date] Output: {output}")
     return output

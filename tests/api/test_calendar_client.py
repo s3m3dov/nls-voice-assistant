@@ -199,6 +199,32 @@ class TestCalendarClient:
         assert result is True
 
     @patch.object(requests.Session, "get")
+    @patch.object(requests.Session, "delete")
+    def test_delete_all_events(self, mock_delete, mock_get, client, sample_event_data):
+        """Test deleting all events."""
+        # Mock list response with 2 events
+        event1 = sample_event_data
+        event2 = {**sample_event_data, "id": 2}
+        mock_get_response = MagicMock()
+        mock_get_response.json.return_value = [event1, event2]
+        mock_get_response.text = str([event1, event2])
+        mock_get_response.raise_for_status = MagicMock()
+        mock_get.return_value = mock_get_response
+
+        # Mock delete response
+        mock_delete_response = MagicMock()
+        mock_delete_response.raise_for_status = MagicMock()
+        mock_delete.return_value = mock_delete_response
+
+        result = client.delete_all_events()
+
+        assert result.total_found == 2
+        assert result.deleted == 2
+        assert result.failed == 0
+        assert 1 in result.deleted_ids
+        assert 2 in result.deleted_ids
+
+    @patch.object(requests.Session, "get")
     def test_http_error_handling(self, mock_get, client):
         """Test HTTP error handling."""
         mock_get.side_effect = requests.exceptions.HTTPError("404 Not Found")

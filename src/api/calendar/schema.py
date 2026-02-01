@@ -39,21 +39,38 @@ class CalendarEventCreateRequest(BaseModel):
     """Request schema for creating a new calendar event."""
 
     title: str = Field(min_length=1, description="Event title")
-    description: Optional[str] = Field(..., description="Event description")
+    description: Optional[str] = Field(default=None, description="Event description")
     start_time: str = Field(description="Start time in ISO format (e.g., 2025-11-03T09:00)")
-    end_time: Optional[str] = Field(..., description="End time in ISO format")
-    location: str = Field(description="Event location")
+    end_time: Optional[str] = Field(default=None, description="End time in ISO format")
+    location: Optional[str] = Field(default=None, description="Event location")
 
 
 class CalendarEventUpdateRequest(BaseModel):
     """Request schema for updating a calendar event (all fields optional)."""
 
-    title: str = Field(min_length=1, description="Event title")
-    description: Optional[str] = Field(..., description="Event description")
-    start_time: str = Field(description="Start time in ISO format (e.g., 2025-11-03T09:00)")
-    end_time: Optional[str] = Field(..., description="End time in ISO format")
-    location: str = Field(description="Event location")
+    title: Optional[str] = Field(default=None, min_length=1, description="Event title")
+    description: Optional[str] = Field(default=None, description="Event description")
+    start_time: Optional[str] = Field(default=None, description="Start time in ISO format (e.g., 2025-11-03T09:00)")
+    end_time: Optional[str] = Field(default=None, description="End time in ISO format")
+    location: Optional[str] = Field(default=None, description="Event location")
 
     def to_dict(self) -> dict:
         """Convert to dict excluding None values."""
         return {k: v for k, v in self.model_dump().items() if v is not None}
+
+
+class CalendarDateRequest(BaseModel):
+    """Request schema for operations on a specific date."""
+
+    date: str = Field(..., description="Date in YYYY-MM-DD format")
+
+
+class CalendarBulkDeleteResponse(BaseModel):
+    """Response schema for bulk deletion operations."""
+
+    total_found: int = Field(..., description="Total number of events found to delete")
+    deleted: int = Field(..., description="Number of events successfully deleted")
+    failed: int = Field(..., description="Number of events that failed to delete")
+    deleted_ids: list[int] = Field(default_factory=list, description="IDs of deleted events")
+    failed_ids: list[int] = Field(default_factory=list, description="IDs of events that failed to delete")
+    target_date: Optional[str] = Field(default=None, description="Target date if deletion was filtered by date")
