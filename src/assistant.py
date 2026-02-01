@@ -79,7 +79,7 @@ class VoiceAssistant:
 
         logger.info(f"Assistant: {full_response}")
 
-    def synthesize_speech(self, text: str) -> tuple[any, int]:
+    def synthesize_speech(self, text: str) -> tuple[any, int] | tuple[None, None]:
         """
         Generate speech audio from text.
 
@@ -87,14 +87,14 @@ class VoiceAssistant:
             text: Text to synthesize
 
         Returns:
-            Tuple of (audio_samples, sample_rate)
+            Tuple of (audio_samples, sample_rate) or (None, None) if nothing to synthesize
         """
         if not self._initialized or self.tts is None:
             raise RuntimeError("TTS not initialized. Call initialize() first.")
 
         clean_text = sanitize_for_tts(text)
         if not clean_text:
-            raise ValueError("No valid text to synthesize after sanitization")
+            return None, None
 
         return self.tts.synthesize(clean_text)
 
