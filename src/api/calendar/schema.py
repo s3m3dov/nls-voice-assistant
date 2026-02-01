@@ -38,21 +38,21 @@ class CalendarEventResponse(BaseModel):
 class CalendarEventCreateRequest(BaseModel):
     """Request schema for creating a new calendar event."""
 
-    title: str = Field(..., min_length=1, description="Event title")
-    description: str = Field(default="", description="Event description")
-    start_time: str = Field(..., description="Start time in ISO format (e.g., 2025-11-03T09:00)")
-    end_time: str = Field(..., description="End time in ISO format")
-    location: str = Field(default="", description="Event location")
+    title: str = Field(min_length=1, description="Event title")
+    description: Optional[str] = Field(..., description="Event description")
+    start_time: str = Field(description="Start time in ISO format (e.g., 2025-11-03T09:00)")
+    end_time: Optional[str] = Field(..., description="End time in ISO format")
+    location: str = Field(description="Event location")
 
 
 class CalendarEventUpdateRequest(BaseModel):
     """Request schema for updating a calendar event (all fields optional)."""
 
-    title: Optional[str] = Field(default=None, min_length=1)
-    description: Optional[str] = None
-    start_time: Optional[str] = None
-    end_time: Optional[str] = None
-    location: Optional[str] = None
+    title: str = Field(min_length=1, description="Event title")
+    description: Optional[str] = Field(..., description="Event description")
+    start_time: str = Field(description="Start time in ISO format (e.g., 2025-11-03T09:00)")
+    end_time: Optional[str] = Field(..., description="End time in ISO format")
+    location: str = Field(description="Event location")
 
     def to_dict(self) -> dict:
         """Convert to dict excluding None values."""
