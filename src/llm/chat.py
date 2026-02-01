@@ -56,9 +56,10 @@ def build_system_prompt() -> str:
         For general questions, respond directly.
         
         Note: When printing time, always prefer `oclock` instead of 00 (zero zero), 
-        Important - Read dates and times in this format:
-        2026-01-13 10:00 -> January 13, 2026, 10 oclock
-        2026-06-27 14:30 -> June 26, 2026, half past 14
+        Important - Read dates and times in this format (providing some examples)
+        2026-01-13T10:00 -> January 13, 2026, 10 oclock
+        2026-06-27T14:30 -> June 26, 2026, half past 14
+        etc. Always use this format for other similar instances as well.
         Reference of months: {_build_month_to_name_context()}
         
         Current date: {today_text}
