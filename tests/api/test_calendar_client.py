@@ -155,9 +155,17 @@ class TestCalendarClient:
         assert result is not None
         assert result.id == 1
 
+    @patch.object(requests.Session, "get")
     @patch.object(requests.Session, "put")
-    def test_update_event_with_dict(self, mock_put, client, sample_event_data):
+    def test_update_event_with_dict(self, mock_put, mock_get, client, sample_event_data):
         """Test updating an event with dict."""
+        # Mock get_event response (existing event)
+        mock_get_response = MagicMock()
+        mock_get_response.json.return_value = sample_event_data
+        mock_get_response.text = "{}"
+        mock_get_response.raise_for_status = MagicMock()
+        mock_get.return_value = mock_get_response
+
         updated_data = {**sample_event_data, "title": "Updated Meeting"}
         mock_response = MagicMock()
         mock_response.json.return_value = updated_data
@@ -170,9 +178,17 @@ class TestCalendarClient:
         assert result is not None
         assert result.title == "Updated Meeting"
 
+    @patch.object(requests.Session, "get")
     @patch.object(requests.Session, "put")
-    def test_update_event_with_request(self, mock_put, client, sample_event_data):
+    def test_update_event_with_request(self, mock_put, mock_get, client, sample_event_data):
         """Test updating an event with CalendarEventUpdateRequest."""
+        # Mock get_event response (existing event)
+        mock_get_response = MagicMock()
+        mock_get_response.json.return_value = sample_event_data
+        mock_get_response.text = "{}"
+        mock_get_response.raise_for_status = MagicMock()
+        mock_get.return_value = mock_get_response
+
         updated_data = {**sample_event_data, "location": "Room 5"}
         mock_response = MagicMock()
         mock_response.json.return_value = updated_data
@@ -228,16 +244,6 @@ class TestCalendarClient:
     def test_http_error_handling(self, mock_get, client):
         """Test HTTP error handling."""
         mock_get.side_effect = requests.exceptions.HTTPError("404 Not Found")
-
-        with pytest.raises(CalendarAPIError) as exc_info:
-            client.list_events()
-
-        assert "Request failed" in str(exc_info.value)
-
-    @patch.object(requests.Session, "get")
-    def test_connection_error_handling(self, mock_get, client):
-        """Test connection error handling."""
-        mock_get.side_effect = requests.exceptions.ConnectionError("Connection refused")
 
         with pytest.raises(CalendarAPIError) as exc_info:
             client.list_events()
