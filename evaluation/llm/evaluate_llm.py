@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 import json
 import sys
-import os
 from pathlib import Path
-from typing import List, Dict, Any, Tuple, Optional
+from typing import List, Dict, Any, Tuple
 
 # Add project root to path
 project_root = Path(__file__).parent.parent.parent
 sys.path.append(str(project_root))
 
-from src.dialogue.chat import chat_stream, build_system_prompt
-from src.dialogue.tools import TOOLS, TOOL_REGISTRY
+from src.llm.chat import chat_stream, build_system_prompt
+
 
 def _normalize_value(value: Any) -> Any:
     if isinstance(value, str):

@@ -13,8 +13,8 @@ sys.path.append(str(project_root))
 from ollama import chat
 
 from src.config import settings
-from src.dialogue.tools import TOOLS
-from evaluate_dialogue import run_evaluation as run_dialogue_eval
+from src.llm.tools import TOOLS
+from evaluate_llm import run_evaluation as run_dialogue_eval
 from evaluate_e2e import run_evaluation as run_e2e_eval
 
 

@@ -4,7 +4,7 @@ from typing import Generator
 
 from src.asr.transcriber import WhisperTranscriber
 from src.config import settings
-from src.dialogue.chat import build_system_prompt, chat_stream
+from src.llm.chat import build_system_prompt, chat_stream
 from src.logger import logger
 from src.tts.kokoro_engine import KokoroTTS
 from src.tts.sanitizer import sanitize_for_tts

@@ -5,7 +5,7 @@ from typing import Generator
 from ollama import chat
 
 from src.config import settings
-from src.dialogue.tools import TOOLS, TOOL_REGISTRY, TOOL_ANNOUNCEMENTS
+from src.llm.tools import TOOLS, TOOL_REGISTRY, TOOL_ANNOUNCEMENTS
 
 
 def _build_date_context() -> str:

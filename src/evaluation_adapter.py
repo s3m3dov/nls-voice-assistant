@@ -7,8 +7,8 @@ from typing import Any
 from ollama import chat
 
 from src.config import settings
-from src.dialogue.chat import build_system_prompt
-from src.dialogue.tools import TOOLS
+from src.llm.chat import build_system_prompt
+from src.llm.tools import TOOLS
 
 
 WEATHER_TOOLS = {

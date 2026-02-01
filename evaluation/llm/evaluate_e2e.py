@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Tuple
 project_root = Path(__file__).parent.parent.parent
 sys.path.append(str(project_root))
 
-from src.dialogue.chat import chat_stream, build_system_prompt
+from src.llm.chat import chat_stream, build_system_prompt
 from src.api.calendar.client import CalendarClient
 from src.config import settings
 
