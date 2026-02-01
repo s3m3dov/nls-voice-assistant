@@ -178,6 +178,7 @@ docker-compose down
 ```
 
 > **Note**: First build takes ~10-15 minutes to download models (Whisper ASR, Kokoro TTS, Ollama LLM).
+> **Access**: Open **http://localhost:7860** in your browser to use the Voice Assistant.
 
 **Manual Docker Build**:
 
@@ -185,10 +186,16 @@ docker-compose down
 # Build the Docker image
 docker build -t nls-voice-assistant .
 
-# Run with external Ollama instance
+# Run CLI mode (Default)
 docker run -it --rm \
     -e OLLAMA_HOST=http://host.docker.internal:11434 \
     nls-voice-assistant
+
+# Run Web UI mode
+docker run -it --rm \
+    -p 7860:7860 \
+    -e OLLAMA_HOST=http://host.docker.internal:11434 \
+    nls-voice-assistant --mode web
 ```
 
 **What Gets Downloaded During Build**:

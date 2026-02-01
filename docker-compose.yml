@@ -44,19 +44,9 @@ services:
       - OLLAMA_HOST=http://ollama:11434
       - GRADIO_ANALYTICS_ENABLED=False
     ports:
-      - "7860:7860"
+      - "7860:7860" # Web UI available at http://localhost:7860
     # Run in web mode for Docker (browser-based audio)
     command: ["python", "src/main.py", "--mode", "web"]
-    # Audio device passthrough (Linux with ALSA)
-    # Uncomment and adjust for your system
-    # devices:
-    #   - /dev/snd:/dev/snd
-    # For PulseAudio on Linux:
-    # volumes:
-    #   - /run/user/1000/pulse:/run/user/1000/pulse
-    #   - ~/.config/pulse/cookie:/root/.config/pulse/cookie
-    # environment:
-    #   - PULSE_SERVER=unix:/run/user/1000/pulse/native
     stdin_open: true
     tty: true
     restart: unless-stopped
