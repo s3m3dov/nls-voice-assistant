@@ -224,7 +224,7 @@ def run_evaluation(test_cases_path: str, *, print_results: bool = True) -> Dict[
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="Run dialogue tool-selection evaluation.")
+    parser = argparse.ArgumentParser(description="Run llm tool-selection evaluation.")
     parser.add_argument("--test-cases", default=str(Path(__file__).parent / "test_cases.json"))
     parser.add_argument("--quiet", action="store_true", help="Print only summary metrics.")
     args = parser.parse_args()

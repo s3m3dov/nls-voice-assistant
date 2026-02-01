@@ -100,7 +100,7 @@ def assistant_step(history: list[dict], user_text: str) -> dict:
     messages.append({"role": "user", "content": user_text})
 
     response = chat(
-        model=settings.dialogue.llm_model,
+        model=settings.llm.model,
         messages=messages,
         tools=TOOLS,
         stream=False,

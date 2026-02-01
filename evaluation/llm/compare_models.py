@@ -111,14 +111,14 @@ def _write_markdown(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Compare dialogue models on evaluation suites.")
+    parser = argparse.ArgumentParser(description="Compare llm models on evaluation suites.")
     parser.add_argument(
         "--models",
         default=",".join(DEFAULT_MODELS),
         help="Comma-separated Ollama model tags.",
     )
     parser.add_argument(
-        "--dialogue-tests",
+        "--llm-tests",
         default=str(Path(__file__).parent / "test_cases.json"),
     )
     parser.add_argument(
@@ -141,7 +141,7 @@ def main() -> None:
     unsupported_models: Dict[str, str] = {}
 
     for model in models:
-        settings.dialogue.llm_model = model
+        settings.llm.model = model
         try:
             chat(
                 model=model,
@@ -152,7 +152,7 @@ def main() -> None:
         except Exception as exc:
             unsupported_models[model] = f"tool calls not supported ({exc})"
             continue
-        settings.dialogue.llm_model = model
+        settings.llm.model = model
         dialogue_results[model] = run_dialogue_eval(str(dialogue_cases), print_results=False)
         e2e_results[model] = run_e2e_eval(str(e2e_cases), print_results=False)
 
