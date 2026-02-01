@@ -39,19 +39,20 @@ class CalendarEventCreateRequest(BaseModel):
     """Request schema for creating a new calendar event."""
 
     title: str = Field(min_length=1, description="Event title")
-    description: Optional[str] = Field(default="", description="Event description")
-    start_time: Optional[str] = Field(default="", description="Start time in ISO format (e.g., 2025-11-03T09:00)")
-    end_time: Optional[str] = Field(default="", description="End time in ISO format")
-    location: Optional[str] = Field(default="", description="Event location")
+    start_time: str = Field(description="Start time in ISO format (e.g., 2025-11-03T09:00)")
+    end_time: str = Field(description="End time in ISO format")
+    description: Optional[str] = Field(..., description="Event description")
+    location: Optional[str] = Field(..., description="Event location")
+
 
 
 class CalendarEventUpdateRequest(BaseModel):
     """Request schema for updating a calendar event (all fields optional)."""
 
     title: Optional[str] = Field(default=None, min_length=1, description="Event title")
-    description: Optional[str] = Field(default=None, description="Event description")
     start_time: Optional[str] = Field(default=None, description="Start time in ISO format (e.g., 2025-11-03T09:00)")
     end_time: Optional[str] = Field(default=None, description="End time in ISO format")
+    description: Optional[str] = Field(default=None, description="Event description")
     location: Optional[str] = Field(default=None, description="Event location")
 
     def to_dict(self) -> dict:

@@ -93,7 +93,7 @@ def get_calendar_event(event_id: int) -> str:
 def create_calendar_event(
         title: str,
         start_time: str,
-        end_time: Optional[str] = None,
+        end_time: str,
         description: Optional[str] = None,
         location: Optional[str] = None,
 ) -> str:
@@ -102,7 +102,7 @@ def create_calendar_event(
     Args:
         title: Title or name of the event (e.g., 'Team Meeting', 'Doctor Appointment') - Required
         start_time: Start time in ISO format (e.g., '2025-01-20T14:00') - Required
-        end_time: End time in ISO format (e.g., '2025-01-20T15:00') - Optional
+        end_time: End time in ISO format (e.g., '2025-01-20T15:00') - Optional, reuse start_time
         description: Description or notes for the event. - Optional
         location: Location where the event takes place. - Required
 
