@@ -2,12 +2,10 @@
 
 import re
 
-from src.assistant import VoiceAssistant
 from src.asr.recorder import VoiceRecorder
-from src.config import settings
+from src.assistant import VoiceAssistant
 from src.logger import logger
 from src.tts.audio_player import play_samples
-from src.tts.sanitizer import sanitize_for_tts
 
 # Regex to split on sentence boundaries while keeping the delimiter
 SENTENCE_SPLIT_RE = re.compile(r'(?<=[.!?])\s+')
@@ -62,9 +60,8 @@ def run() -> None:
                 if len(sentences) > 1:
                     # Speak all complete sentences
                     for sentence in sentences[:-1]:
-                        clean_text = sanitize_for_tts(sentence.strip())
-                        if clean_text:
-                            samples, sample_rate = assistant.synthesize_speech(clean_text)
+                        samples, sample_rate = assistant.synthesize_speech(sentence.strip())
+                        if samples is not None:
                             play_samples(samples, sample_rate)
 
                     # Keep the incomplete sentence in buffer
@@ -72,9 +69,8 @@ def run() -> None:
 
             # Speak any remaining text in buffer
             if text_buffer.strip():
-                clean_text = sanitize_for_tts(text_buffer.strip())
-                if clean_text:
-                    samples, sample_rate = assistant.synthesize_speech(clean_text)
+                samples, sample_rate = assistant.synthesize_speech(text_buffer.strip())
+                if samples is not None:
                     play_samples(samples, sample_rate)
 
         except KeyboardInterrupt:

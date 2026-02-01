@@ -4,6 +4,7 @@ import os
 import re
 from enum import Enum
 from typing import Generator
+
 import numpy as np
 import torch
 
@@ -22,7 +23,6 @@ from src.assistant import VoiceAssistant
 from src.asr.stream import VADStreamProcessor, StreamState
 from src.logger import logger, setup_logging
 from src.interface.ui.config import UISettings
-from src.tts.sanitizer import sanitize_for_tts
 
 
 SENTENCE_SPLIT_RE = re.compile(r'(?<=[.!?])\s+')
@@ -80,12 +80,10 @@ class TTSBuffer:
 
     def _synthesize_text(self, text: str) -> tuple[int, np.ndarray] | None:
         """Synthesize a single text segment."""
-        clean_text = sanitize_for_tts(text)
-        if not clean_text:
-            return None
-
         try:
-            samples, sample_rate = self.assistant.synthesize_speech(clean_text)
+            samples, sample_rate = self.assistant.synthesize_speech(text)
+            if samples is None:
+                return None
             # Gradio expects (sample_rate, numpy_array)
             return (sample_rate, samples)
         except Exception as e:
