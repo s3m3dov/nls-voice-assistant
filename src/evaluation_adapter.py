@@ -23,6 +23,7 @@ CALENDAR_TOOL_INTENTS = {
     "create_calendar_event": "CAL_CREATE",
     "update_calendar_event": "CAL_UPDATE",
     "delete_calendar_event": "CAL_DELETE",
+    "delete_all_calendar_events": "CAL_DELETE_ALL",
 }
 
 
@@ -63,6 +64,9 @@ def _build_calendar_api_call(tool_name: str, args: dict) -> tuple[str, str, dict
         method = "DELETE"
         if "event_id" in args:
             params["id"] = str(args["event_id"])
+    elif tool_name == "delete_all_calendar_events":
+        method = "DELETE"
+        body["delete_all"] = True
 
     slots = {}
     if "event_id" in args:
@@ -70,6 +74,8 @@ def _build_calendar_api_call(tool_name: str, args: dict) -> tuple[str, str, dict
     for key in ["title", "start_time", "end_time", "description", "location"]:
         if key in args and args[key] not in (None, ""):
             slots[key] = args[key]
+    if tool_name == "delete_all_calendar_events":
+        slots["delete_all"] = True
 
     return CALENDAR_TOOL_INTENTS.get(tool_name, ""), method, slots, params, body
 
