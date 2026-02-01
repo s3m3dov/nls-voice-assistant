@@ -34,7 +34,7 @@ def _build_month_to_name_context() -> str:
         "November": "11",
         "December": "12",
     }
-    return "\n".join()
+    return "\n".join(f"{name}: {num}" for name, num in months.items())
 
 
 def build_system_prompt() -> str:
