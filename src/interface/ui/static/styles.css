@@ -1,0 +1,49 @@
+/**
+ * Voice Assistant UI Styles
+ */
+
+/* Chatbot styling - reset border */
+.chatbot {
+    border: none !important;
+}
+
+/* Chatbot styling - layout */
+.chatbot {
+    min-height: 400px;
+    flex-grow: 1;
+    border-radius: 15px;
+    border: 1px solid #e2e8f0;
+}
+
+/* Status indicator container */
+.status-container {
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent !important;
+    visibility: visible !important;
+    pointer-events: none;
+}
+
+/* Status display badge */
+.status-display {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px 20px;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 10px;
+    display: inline-block;
+    min-width: 200px;
+    transition: opacity 120ms ease-in-out;
+    opacity: 1 !important;
+}
+
+/* Main container layout */
+.main-container {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 20px;
+}
