@@ -24,5 +24,5 @@ TOOL_ANNOUNCEMENTS = {
     "create_calendar_event": "Calling tool named create calendar event...",
     "update_calendar_event": "Calling tool named update calendar event...",
     "delete_calendar_event": "Calling tool named delete calendar event...",
-    "delete_all_calendar_events": "Calling tool named d§elete all calendar events...",
+    "delete_all_calendar_events": "Calling tool named delete all calendar events...",
 }
