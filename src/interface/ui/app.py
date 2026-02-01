@@ -1,5 +1,7 @@
 """Gradio Web UI for the Voice Assistant - Refactored."""
 
+import base64
+import io
 import os
 import re
 from enum import Enum
@@ -13,9 +15,11 @@ os.environ["GRADIO_ANALYTICS_ENABLED"] = "False"
 
 import gradio as gr
 
+
 # Monkey-patch to fix Gradio's JSON schema parsing bug
 def _patched_get_api_info(self):
     return {"named_endpoints": {}, "unnamed_endpoints": {}}
+
 
 gr.Blocks.get_api_info = _patched_get_api_info
 
@@ -25,11 +29,34 @@ from src.logger import logger, setup_logging
 from src.interface.ui.config import UISettings
 
 
-SENTENCE_SPLIT_RE = re.compile(r'(?<=[.!?])\s+')
+SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+")
+
+
+def audio_to_base64_wav(samples: np.ndarray, sample_rate: int) -> str:
+    """Convert audio samples to base64-encoded WAV string for browser playback."""
+    import wave
+
+    # Ensure samples are in the right format
+    if samples.dtype == np.float32 or samples.dtype == np.float64:
+        # Convert float [-1, 1] to int16
+        samples = (samples * 32767).astype(np.int16)
+
+    # Create WAV in memory
+    buffer = io.BytesIO()
+    with wave.open(buffer, "wb") as wav_file:
+        wav_file.setnchannels(1)  # Mono
+        wav_file.setsampwidth(2)  # 16-bit
+        wav_file.setframerate(sample_rate)
+        wav_file.writeframes(samples.tobytes())
+
+    # Encode to base64
+    buffer.seek(0)
+    return base64.b64encode(buffer.read()).decode("utf-8")
 
 
 class StatusIcon(str, Enum):
     """UI status indicators."""
+
     INACTIVE = "🔴 Inactive"
     WAITING = "💤 Waiting..."
     LISTENING = "👂 Listening..."
@@ -42,13 +69,16 @@ class StatusIcon(str, Enum):
 # TTS Buffering & Synthesis
 # ============================================================================
 
+
 class TTSBuffer:
     """Handles text-to-speech buffering and synthesis for streaming."""
 
     def __init__(self, assistant: VoiceAssistant):
         self.assistant = assistant
 
-    def process_buffer(self, text_buffer: str) -> tuple[str, list[tuple[int, np.ndarray]]]:
+    def process_buffer(
+        self, text_buffer: str
+    ) -> tuple[str, list[tuple[int, np.ndarray]]]:
         """
         Synthesize complete sentences from buffer.
         Returns (remaining_text, list_of_audio_chunks).
@@ -95,6 +125,7 @@ class TTSBuffer:
 # Main Stream Handler
 # ============================================================================
 
+
 class AudioStreamHandler:
     """Handles the main audio streaming pipeline."""
 
@@ -130,13 +161,13 @@ class AudioStreamHandler:
         # 1. Normalize Input (Basic type conversion only)
         # Resampling is now handled by the shared VADStreamProcessor
         sample_rate, audio_data = audio_chunk
-        
+
         # Normalize to float32
         if audio_data.dtype == np.int16:
             audio_data = audio_data.astype(np.float32) / 32768.0
         elif audio_data.dtype == np.int32:
             audio_data = audio_data.astype(np.float32) / 2147483648.0
-        
+
         # Mono conversion
         if len(audio_data.shape) > 1:
             audio_data = audio_data.mean(axis=1)
@@ -149,14 +180,14 @@ class AudioStreamHandler:
         # 3. Handle VAD State Changes
         if state == StreamState.WAITING:
             yield history, StatusIcon.WAITING.value, None
-            
+
         elif state == StreamState.LISTENING:
             yield history, StatusIcon.LISTENING.value, None
-            
+
         elif state == StreamState.FINISHED and full_audio is not None:
             # Utterance complete - Trigger Pipeline
             yield from self._process_utterance(full_audio, history)
-            
+
             # Reset for next turn
             self.vad_processor.reset()
 
@@ -212,7 +243,7 @@ class AudioStreamHandler:
 
             # Update UI
             history[-1][1] = full_response
-            
+
             # Yield any generated audio chunks
             if audio_chunks:
                 for audio_chunk in audio_chunks:
@@ -222,10 +253,10 @@ class AudioStreamHandler:
 
         # Play any remaining text
         audio_chunks = self.tts.process_remaining(text_buffer)
-        
+
         # Final update
         history[-1][1] = full_response
-        
+
         if audio_chunks:
             for audio_chunk in audio_chunks:
                 yield history, StatusIcon.SPEAKING.value, audio_chunk
@@ -237,8 +268,12 @@ class AudioStreamHandler:
 # Application
 # ============================================================================
 
+
 class VoiceAssistantApp:
     """Main application controller."""
+
+    # Class-level counter for unique audio chunk IDs
+    _audio_chunk_counter = 0
 
     def __init__(self):
         self.assistant: VoiceAssistant | None = None
@@ -265,6 +300,7 @@ class VoiceAssistantApp:
             title=self.ui_settings.title,
             theme=gr.themes.Soft(primary_hue="indigo", neutral_hue="slate"),
             css=self._get_custom_css(),
+            head=self._get_audio_player_js(),
         ) as demo:
             # No persistent state needed in UI anymore, managed by handler class
             state = gr.State()
@@ -273,7 +309,14 @@ class VoiceAssistantApp:
             status_label = gr.HTML(
                 value=f'<div class="status-display">{StatusIcon.WAITING.value}</div>',
                 elem_classes=["status-container"],
-                elem_id="status_label"
+                elem_id="status_label",
+            )
+
+            # Hidden element to trigger audio playback via JavaScript
+            audio_data = gr.HTML(
+                value="",
+                visible=False,
+                elem_id="audio_data",
             )
 
             with gr.Column(elem_classes=["main-container"]):
@@ -286,7 +329,7 @@ class VoiceAssistantApp:
                     bubble_full_width=False,
                     avatar_images=(
                         None,
-                        "https://api.dicebear.com/7.x/bottts/svg?seed=assistant"
+                        "https://api.dicebear.com/7.x/bottts/svg?seed=assistant",
                     ),
                 )
 
@@ -298,36 +341,53 @@ class VoiceAssistantApp:
                     label="Microphone Stream",
                     show_label=False,
                 )
-                
-                # Hidden audio output component for browser playback
-                audio_output = gr.Audio(
-                    label="Assistant Voice",
-                    type="numpy",
-                    streaming=True,
-                    autoplay=True,
-                    visible=False,
-                )
 
                 with gr.Accordion("Controls", open=False):
                     clear_btn = gr.Button("Clear Chat", variant="secondary")
 
+            # Track audio chunks across the session
+            audio_chunks_html = gr.State(value="")
+
             # Wire up events
-            def process_with_html_status(*args):
-                """Wrapper to convert status text to HTML and pass through audio."""
-                for history, status, audio_chunk in self.handler.process_stream(*args):
-                    yield history, f'<div class="status-display">{status}</div>', audio_chunk
+            def process_with_audio(audio_input, chat_history, accumulated_audio):
+                """Process stream and convert audio to base64 for JS playback."""
+                if accumulated_audio is None:
+                    accumulated_audio = ""
+
+                for history, status, audio_chunk in self.handler.process_stream(
+                    audio_input, chat_history
+                ):
+                    # Convert audio chunk to base64 for JavaScript playback
+                    if audio_chunk is not None:
+                        sample_rate, samples = audio_chunk
+                        audio_b64 = audio_to_base64_wav(samples, sample_rate)
+                        # Append new chunk with unique ID
+                        VoiceAssistantApp._audio_chunk_counter += 1
+                        chunk_id = VoiceAssistantApp._audio_chunk_counter
+                        accumulated_audio += f'<div class="audio-chunk" data-audio="{audio_b64}" data-chunk-id="{chunk_id}"></div>'
+                        logger.debug(f"Sending audio chunk {chunk_id} to browser")
+
+                    yield (
+                        history,
+                        f'<div class="status-display">{status}</div>',
+                        accumulated_audio,
+                        accumulated_audio,
+                    )
 
             audio_input.stream(
-                fn=process_with_html_status,
-                inputs=[audio_input, chatbot],
-                outputs=[chatbot, status_label, audio_output],
+                fn=process_with_audio,
+                inputs=[audio_input, chatbot, audio_chunks_html],
+                outputs=[chatbot, status_label, audio_data, audio_chunks_html],
                 show_progress=False,
             )
 
-            clear_btn.click(
-                fn=self.clear_conversation,
-                outputs=[chatbot]
-            )
+            def clear_all():
+                """Clear conversation and reset audio state."""
+                if self.assistant is not None:
+                    self.assistant.reset_conversation()
+                return [], ""
+
+            clear_btn.click(fn=clear_all, outputs=[chatbot, audio_data])
 
         return demo
 
@@ -377,6 +437,108 @@ class VoiceAssistantApp:
             }
         """
 
+    @staticmethod
+    def _get_audio_player_js() -> str:
+        """Return JavaScript for Web Audio API playback."""
+        return """
+        <script>
+        (function() {
+            // Audio queue for sequential playback
+            const audioQueue = [];
+            let isPlaying = false;
+            let lastProcessedChunkId = 0;
+            let audioContext = null;
+            
+            // Get or create audio context
+            function getAudioContext() {
+                if (!audioContext || audioContext.state === 'closed') {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                return audioContext;
+            }
+            
+            // Play next audio in queue
+            async function playNext() {
+                if (audioQueue.length === 0) {
+                    isPlaying = false;
+                    return;
+                }
+                
+                isPlaying = true;
+                const {audioData, chunkId} = audioQueue.shift();
+                console.log('Playing chunk:', chunkId, 'queue:', audioQueue.length);
+                
+                try {
+                    const binaryString = atob(audioData);
+                    const bytes = new Uint8Array(binaryString.length);
+                    for (let i = 0; i < binaryString.length; i++) {
+                        bytes[i] = binaryString.charCodeAt(i);
+                    }
+                    
+                    const ctx = getAudioContext();
+                    const audioBuffer = await ctx.decodeAudioData(bytes.buffer.slice(0));
+                    
+                    const source = ctx.createBufferSource();
+                    source.buffer = audioBuffer;
+                    source.connect(ctx.destination);
+                    source.onended = playNext;
+                    source.start(0);
+                } catch (e) {
+                    console.error('Playback error:', e);
+                    playNext();
+                }
+            }
+            
+            // Scan for all unprocessed audio chunks
+            function scanForAudio() {
+                const container = document.getElementById('audio_data');
+                if (!container) return;
+                
+                const chunks = container.querySelectorAll('.audio-chunk[data-chunk-id]');
+                chunks.forEach(chunk => {
+                    const chunkId = parseInt(chunk.getAttribute('data-chunk-id'), 10);
+                    if (chunkId > lastProcessedChunkId) {
+                        const audioData = chunk.getAttribute('data-audio');
+                        if (audioData) {
+                            lastProcessedChunkId = chunkId;
+                            audioQueue.push({audioData, chunkId});
+                            console.log('Queued chunk:', chunkId);
+                        }
+                    }
+                });
+                
+                if (audioQueue.length > 0 && !isPlaying) {
+                    playNext();
+                }
+            }
+            
+            // Watch for changes
+            const observer = new MutationObserver(scanForAudio);
+            
+            function startObserver() {
+                const target = document.getElementById('audio_data');
+                if (target) {
+                    observer.observe(target, {childList: true, subtree: true, characterData: true});
+                    console.log('Audio observer started');
+                    setInterval(scanForAudio, 50);
+                } else {
+                    setTimeout(startObserver, 100);
+                }
+            }
+            
+            document.addEventListener('click', () => getAudioContext(), {once: true});
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', startObserver);
+            } else {
+                startObserver();
+            }
+        })();
+        </script>
+        """
 
     def run(self) -> None:
         """Start the application."""
@@ -397,6 +559,7 @@ class VoiceAssistantApp:
 # ============================================================================
 # Entry Point
 # ============================================================================
+
 
 def run() -> None:
     """Application entry point."""
