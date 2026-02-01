@@ -93,18 +93,18 @@ def get_calendar_event(event_id: int) -> str:
 def create_calendar_event(
         title: str,
         start_time: str,
-        end_time: str,
-        description: str = "",
-        location: str = "",
+        end_time: str = None,
+        description: str = None,
+        location: str = None,
 ) -> str:
     """Create a new calendar event/appointment.
 
     Args:
-        title: Title or name of the event (e.g., 'Team Meeting', 'Doctor Appointment')
-        start_time: Start time in ISO format (e.g., '2025-01-20T14:00')
-        end_time: End time in ISO format (e.g., '2025-01-20T15:00')
-        description: Optional description or notes for the event.
-        location: Optional location where the event takes place.
+        title: Title or name of the event (e.g., 'Team Meeting', 'Doctor Appointment') - Required
+        start_time: Start time in ISO format (e.g., '2025-01-20T14:00') - Required
+        end_time: End time in ISO format (e.g., '2025-01-20T15:00') - Optional
+        description: Optional description or notes for the event. - Optional
+        location: Optional location where the event takes place. - Required
 
     Returns:
         JSON string with the created event including its assigned ID.
@@ -139,11 +139,11 @@ def update_calendar_event(
 
     Args:
         event_id: The unique identifier of the event to update.
-        title: New title for the event (optional).
-        start_time: New start time in ISO format (optional).
+        title: New title for the event (required).
+        start_time: New start time in ISO format (required).
         end_time: New end time in ISO format (optional).
         description: New description (optional).
-        location: New location (optional).
+        location: New location (required).
 
     Returns:
         JSON string with the updated event details.
