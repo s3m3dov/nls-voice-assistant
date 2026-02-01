@@ -1,12 +1,19 @@
 """Calendar API client for managing calendar events (CRUD operations)."""
 
+from datetime import datetime
 from typing import Optional
 
 import requests
 
 from src.api.config import APISettings
 from .exception import CalendarAPIError
-from .schema import CalendarEventCreateRequest, CalendarEventResponse, CalendarEventUpdateRequest
+from .schema import (
+    CalendarBulkDeleteResponse,
+    CalendarDateRequest,
+    CalendarEventCreateRequest,
+    CalendarEventResponse,
+    CalendarEventUpdateRequest,
+)
 
 
 class CalendarClient:
@@ -183,12 +190,12 @@ class CalendarClient:
         except requests.exceptions.RequestException as e:
             raise CalendarAPIError(f"Request failed: {e}") from e
 
-    def delete_all_events(self) -> dict:
+    def delete_all_events(self) -> CalendarBulkDeleteResponse:
         """
         Delete all calendar events by listing and deleting each event.
 
         Returns:
-            Summary dict with deleted and failed event IDs.
+            CalendarBulkDeleteResponse with deleted and failed event IDs.
 
         Raises:
             CalendarAPIError: If listing events fails.
@@ -196,11 +203,9 @@ class CalendarClient:
         events = self.list_events()
         deleted_ids: list[int] = []
         failed_ids: list[int] = []
-        skipped_missing_id = 0
 
         for event in events:
             if event.id is None:
-                skipped_missing_id += 1
                 continue
             try:
                 if self.delete_event(event.id):
@@ -210,11 +215,69 @@ class CalendarClient:
             except CalendarAPIError:
                 failed_ids.append(event.id)
 
-        return {
-            "total": len(events),
-            "deleted": len(deleted_ids),
-            "failed": len(failed_ids),
-            "skipped_missing_id": skipped_missing_id,
-            "deleted_ids": deleted_ids,
-            "failed_ids": failed_ids,
-        }
+        return CalendarBulkDeleteResponse(
+            total_found=len(events),
+            deleted=len(deleted_ids),
+            failed=len(failed_ids),
+            deleted_ids=deleted_ids,
+            failed_ids=failed_ids,
+        )
+
+    def get_events_by_date(self, request: CalendarDateRequest) -> list[CalendarEventResponse]:
+        """
+        Get events for a specific date.
+
+        Args:
+            request: CalendarDateRequest with the target date.
+
+        Returns:
+            List of CalendarEventResponse objects on that date.
+        """
+        all_events = self.list_events()
+        target_date_str = request.date
+
+        try:
+            target_date = datetime.strptime(target_date_str, "%Y-%m-%d").date()
+        except ValueError as e:
+            raise CalendarAPIError(f"Invalid date format: {target_date_str}") from e
+
+        filtered_events = []
+        for event in all_events:
+            if event.start_datetime and event.start_datetime.date() == target_date:
+                filtered_events.append(event)
+
+        return filtered_events
+
+    def delete_events_by_date(self, request: CalendarDateRequest) -> CalendarBulkDeleteResponse:
+        """
+        Delete all events on a specific date.
+
+        Args:
+            request: CalendarDateRequest with the target date.
+
+        Returns:
+            CalendarBulkDeleteResponse with deletion summary.
+        """
+        events_to_delete = self.get_events_by_date(request)
+        deleted_ids: list[int] = []
+        failed_ids: list[int] = []
+
+        for event in events_to_delete:
+            if event.id is None:
+                continue
+            try:
+                if self.delete_event(event.id):
+                    deleted_ids.append(event.id)
+                else:
+                    failed_ids.append(event.id)
+            except CalendarAPIError:
+                failed_ids.append(event.id)
+
+        return CalendarBulkDeleteResponse(
+            total_found=len(events_to_delete),
+            deleted=len(deleted_ids),
+            failed=len(failed_ids),
+            deleted_ids=deleted_ids,
+            failed_ids=failed_ids,
+            target_date=request.date
+        )
