@@ -58,6 +58,7 @@ def build_system_prompt() -> str:
         Read dates and times in this format:
         2026-01-13 10:00 -> January 13, 2026, 10 oclock
         2026-06-27 14:30 -> June 26, 2026, half past 14
+        Always replace 00 (zero-zero) with oclock.
         
         Reference of months: {_build_month_to_name_context()}
         
