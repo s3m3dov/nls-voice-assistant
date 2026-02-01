@@ -15,7 +15,7 @@ class TestIntegrationCalendar:
     @pytest.fixture
     def random_calendar_id(self):
         """Generate a random calendar ID for isolation."""
-        return f"test-integration-{uuid.uuid4()}"
+        return f"team-ezekiel-{uuid.uuid4()}"
 
     @pytest.fixture
     def settings(self, random_calendar_id):
