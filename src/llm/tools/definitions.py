@@ -1,3 +1,4 @@
+import json
 from typing import Optional
 
 from src.api.calendar.client import CalendarClient
@@ -184,3 +185,15 @@ def delete_calendar_event(event_id: int) -> str:
     logger.info(f"[delete_calendar_event] Output: {output}")
     return output
 
+
+def delete_all_calendar_events() -> str:
+    """Delete all calendar events.
+
+    Returns:
+        JSON string with deletion summary and IDs.
+    """
+    logger.info("[delete_all_calendar_events] Input: (none)")
+    summary = _calendar_client.delete_all_events()
+    output = json.dumps(summary)
+    logger.info(f"[delete_all_calendar_events] Output: {output}")
+    return output

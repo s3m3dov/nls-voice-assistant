@@ -182,3 +182,39 @@ class CalendarClient:
             return True
         except requests.exceptions.RequestException as e:
             raise CalendarAPIError(f"Request failed: {e}") from e
+
+    def delete_all_events(self) -> dict:
+        """
+        Delete all calendar events by listing and deleting each event.
+
+        Returns:
+            Summary dict with deleted and failed event IDs.
+
+        Raises:
+            CalendarAPIError: If listing events fails.
+        """
+        events = self.list_events()
+        deleted_ids: list[int] = []
+        failed_ids: list[int] = []
+        skipped_missing_id = 0
+
+        for event in events:
+            if event.id is None:
+                skipped_missing_id += 1
+                continue
+            try:
+                if self.delete_event(event.id):
+                    deleted_ids.append(event.id)
+                else:
+                    failed_ids.append(event.id)
+            except CalendarAPIError:
+                failed_ids.append(event.id)
+
+        return {
+            "total": len(events),
+            "deleted": len(deleted_ids),
+            "failed": len(failed_ids),
+            "skipped_missing_id": skipped_missing_id,
+            "deleted_ids": deleted_ids,
+            "failed_ids": failed_ids,
+        }

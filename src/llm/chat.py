@@ -48,7 +48,7 @@ def build_system_prompt() -> str:
         You can:
         - Answer general questions
         - Provide weather information for any location (7-day forecast)
-        - Manage calendar events (list, create, update, delete appointments)
+        - Manage calendar events (list, create, update, delete appointments, delete all events)
         
         Be concise and natural in your responses. When you need weather or calendar data,
         use the available tools. These tools provide the most accurate information.
