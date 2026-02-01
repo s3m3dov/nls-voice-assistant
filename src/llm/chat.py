@@ -8,7 +8,7 @@ from src.config import settings
 from src.llm.tools import TOOLS, TOOL_REGISTRY, TOOL_ANNOUNCEMENTS
 
 
-def _build_date_context() -> str:
+def _build_week_to_date_context() -> str:
     """Build a 7-day calendar for LLM date reference."""
     today = datetime.today()
     lines = []
@@ -18,11 +18,29 @@ def _build_date_context() -> str:
         lines.append(f"  - {label}: {day.strftime('%Y-%m-%d')} ({day.strftime('%A')})")
     return "\n".join(lines)
 
+def _build_month_to_name_context() -> str:
+    """Build a month calendar for LLM date reference."""
+    months = {
+        "January": "01",
+        "February": "02",
+        "March": "03",
+        "April": "04",
+        "May": "05",
+        "June": "06",
+        "July": "07",
+        "August": "08",
+        "September": "09",
+        "October": "10",
+        "November": "11",
+        "December": "12",
+    }
+    return "\n".join()
+
 
 def build_system_prompt() -> str:
     """Build the system prompt with current date context."""
     today_text = datetime.today().strftime("%d %B %Y, %A")
-    week_calendar = _build_date_context()
+    week_calendar = _build_week_to_date_context()
 
     return f"""
         You are a helpful VOICE assistant. 
@@ -36,6 +54,10 @@ def build_system_prompt() -> str:
         use the available tools. These tools provide the most accurate information.
         
         For general questions, respond directly.
+        
+        Read dates in this format:
+        2026-01-13 -> 13 January 2026
+        Reference of months: {_build_month_to_name_context()}
         
         Current date: {today_text}
         
