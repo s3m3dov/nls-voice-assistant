@@ -11,7 +11,7 @@ def main() -> None:
     parser.add_argument(
         "--mode",
         choices=["cli", "web"],
-        default="cli",
+        default="web",
         help="Run mode: 'cli' for terminal, 'web' for Gradio UI (default: cli)",
     )
     args = parser.parse_args()
