@@ -1,0 +1,42 @@
+[
+  {
+    "id": "weather_forecast",
+    "input": "Get the 7-day forecast for Berlin.",
+    "expected_tool": "get_weather_forecast",
+    "expected_args_contains": {
+      "place": "Berlin"
+    }
+  },
+  {
+    "id": "weather_day",
+    "input": "What's the weather in Munich on Friday?",
+    "expected_tool": "get_weather_for_day",
+    "expected_args_contains": {
+      "place": "Munich",
+      "day": "friday"
+    }
+  },
+  {
+    "id": "weather_today",
+    "input": "How is the weather today in Frankfurt?",
+    "expected_tool": "get_weather_for_today",
+    "expected_args_contains": {
+      "place": "Frankfurt"
+    }
+  },
+  {
+    "id": "calendar_list",
+    "input": "Show my calendar events.",
+    "expected_tool": "list_calendar_events",
+    "expected_args_contains": {}
+  },
+  {
+    "id": "calendar_create",
+    "input": "Add a test meeting for tomorrow at 10 AM.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "test meeting"
+    },
+    "cleanup_created_event": true
+  }
+]
