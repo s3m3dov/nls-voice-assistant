@@ -2,9 +2,8 @@
 from datetime import datetime, timedelta
 from typing import Generator, Callable, cast
 
-from ollama import chat
-
 from src.config import settings
+from src.llm.client import client
 from src.llm.tools import TOOLS, TOOL_REGISTRY, TOOL_ANNOUNCEMENTS
 
 
@@ -108,7 +107,7 @@ def chat_stream(user_input: str, messages: list) -> Generator[str, None, None]:
         tool_calls = []
 
         # Stream response
-        for chunk in chat(model=settings.llm.model, messages=messages, tools=TOOLS, stream=True):  # type: ignore
+        for chunk in client.chat(model=settings.llm.model, messages=messages, tools=TOOLS, stream=True):  # type: ignore
             if chunk.message.content:
                 full_content += chunk.message.content
                 yield chunk.message.content
