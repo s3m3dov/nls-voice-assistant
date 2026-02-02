@@ -44,7 +44,7 @@ services:
       ollama-init:
         condition: service_completed_successfully
     environment:
-      - OLLAMA_HOST=http://ollama:11434
+      - OLLAMA_BASE_URL=http://ollama:11434
       - GRADIO_ANALYTICS_ENABLED=False
     ports:
       - "7860:7860" # Web UI available at http://localhost:7860
