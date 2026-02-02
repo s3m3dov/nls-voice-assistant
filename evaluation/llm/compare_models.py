@@ -19,15 +19,20 @@ from evaluate_e2e import run_evaluation as run_e2e_eval
 
 
 DEFAULT_MODELS = [
+    "qwen2.5:3b-instruct"  # small
     "qwen2.5:7b",
     "qwen2.5:7b-instruct",
+    "qwen3-vl:2b-instruct", # small
+    "qwen3-vl:4b", # small
+    "qwen3-vl:4b-instruct", # small
     "qwen3-vl:8b",
     "qwen3-vl:8b-instruct",
     "mistral:7b",
     "mistral:7b-instruct",
     "llama3.1:8b",
-    "llama3.2:3b",
-    "mistral-nemo:12b"
+    "llama3.2:3b", # small
+    "llama3.2:1b-instruct-q4_K_M" # small
+    # "mistral-nemo:12b" # too large
 ]
 
 
