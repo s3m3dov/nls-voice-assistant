@@ -25,7 +25,7 @@ Verify the Image:
 docker images | grep -E "nls-voice-assistant|ollama"
 ```
 
-You should see the nls-voice-assistant related containers in the list.
+You should see the nls-voice-assistant related images in the list.
 
 ### Step 2: Create a Docker network
 
