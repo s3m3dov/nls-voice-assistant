@@ -1,6 +1,6 @@
 """Shared Voice Assistant core logic used by both CLI and UI interfaces."""
 
-from typing import Generator
+from typing import Generator, Any
 
 from src.asr.transcriber import WhisperTranscriber
 from src.config import settings
@@ -79,7 +79,7 @@ class VoiceAssistant:
 
         logger.info(f"Assistant: {full_response}")
 
-    def synthesize_speech(self, text: str) -> tuple[any, int] | tuple[None, None]:
+    def synthesize_speech(self, text: str) -> tuple[Any, int] | tuple[None, None]:
         """
         Generate speech audio from text.
 

@@ -19,17 +19,19 @@ WEATHER_TOOLS = {
 
 CALENDAR_TOOL_INTENTS = {
     "list_calendar_events": "CAL_LIST",
+    "get_calendar_events_for_date": "CAL_LIST_DATE",
     "get_calendar_event": "CAL_GET",
     "create_calendar_event": "CAL_CREATE",
     "update_calendar_event": "CAL_UPDATE",
     "delete_calendar_event": "CAL_DELETE",
+    "delete_calendar_events_for_date": "CAL_DELETE_DATE",
     "delete_all_calendar_events": "CAL_DELETE_ALL",
 }
 
 
-def _extract_tool_call(tool_call: Any) -> tuple[str, dict]:
+def _extract_tool_call(tool_call: Any) -> tuple[str, dict[str, Any]]:
     name = ""
-    args = {}
+    args: dict[str, Any] = {}
     if hasattr(tool_call, "function"):
         func = tool_call.function
         name = getattr(func, "name", "")
@@ -46,6 +48,10 @@ def _build_calendar_api_call(
 
     if tool_name == "list_calendar_events":
         method = "GET"
+    elif tool_name == "get_calendar_events_for_date":
+        method = "GET"
+        if "date" in args:
+            params["date"] = str(args["date"])
     elif tool_name == "get_calendar_event":
         method = "GET"
         if "event_id" in args:
@@ -66,13 +72,19 @@ def _build_calendar_api_call(
         method = "DELETE"
         if "event_id" in args:
             params["id"] = str(args["event_id"])
+    elif tool_name == "delete_calendar_events_for_date":
+        method = "DELETE"
+        if "date" in args:
+            params["date"] = str(args["date"])
     elif tool_name == "delete_all_calendar_events":
         method = "DELETE"
         body["delete_all"] = True
 
-    slots = {}
+    slots: dict[str, Any] = {}
     if "event_id" in args:
         slots["id"] = str(args["event_id"])
+    if "date" in args:
+        slots["date"] = str(args["date"])
     for key in ["title", "start_time", "end_time", "description", "location"]:
         if key in args and args[key] not in (None, ""):
             slots[key] = args[key]
@@ -110,7 +122,7 @@ def assistant_step(history: list[dict], user_text: str) -> dict:
     response = chat(
         model=settings.llm.model,
         messages=messages,
-        tools=TOOLS,
+        tools=TOOLS,  # type: ignore
         stream=False,
     )
 

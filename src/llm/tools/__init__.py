@@ -11,6 +11,8 @@ TOOLS = [
     definitions.update_calendar_event,
     definitions.delete_calendar_event,
     definitions.delete_all_calendar_events,
+    definitions.get_calendar_events_for_date,
+    definitions.delete_calendar_events_for_date,
 ]
 
 TOOL_REGISTRY = {func.__name__: func for func in TOOLS}
@@ -25,4 +27,6 @@ TOOL_ANNOUNCEMENTS = {
     "update_calendar_event": "Calling tool named update calendar event...",
     "delete_calendar_event": "Calling tool named delete calendar event...",
     "delete_all_calendar_events": "Calling tool named delete all calendar events...",
+    "get_calendar_events_for_date": "Calling tool named get calendar events for date...",
+    "delete_calendar_events_for_date": "Calling tool named delete calendar events for date...",
 }

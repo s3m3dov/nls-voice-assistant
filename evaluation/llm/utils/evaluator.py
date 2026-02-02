@@ -1,6 +1,7 @@
 """Test case evaluator for dialogue and E2E modes."""
 
 from dataclasses import dataclass, field
+from typing import Any
 
 from evaluation.llm.utils.validators import validate_output, ValidationResult
 from evaluation.llm.utils.metrics import BenchmarkMetrics, args_match
@@ -60,7 +61,7 @@ class CaseEvaluator:
         self._log(f"Case: {case.id}\nInput: {case.input}")
 
         # Run chat
-        messages = [{"role": "system", "content": build_system_prompt()}]
+        messages: list[dict[str, Any]] = [{"role": "system", "content": build_system_prompt()}]
         try:
             for _ in chat_stream(case.input, messages):
                 pass
@@ -69,12 +70,15 @@ class CaseEvaluator:
             return EvalResult(case.id, "error", reason=str(e))
 
         # Extract tool calls
-        calls, outputs = [], []
+        calls: list[dict[str, Any]] = []
+        outputs: list[str] = []
         for msg in messages:
             if msg.get("role") == "assistant" and "tool_calls" in msg:
-                calls.extend(msg["tool_calls"])
+                tool_calls = msg.get("tool_calls")
+                if isinstance(tool_calls, list):
+                    calls.extend(tool_calls)
             if msg.get("role") == "tool":
-                outputs.append(msg.get("content", ""))
+                outputs.append(str(msg.get("content", "")))
 
         # No tool called
         if not calls:
