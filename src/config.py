@@ -31,7 +31,7 @@ class Settings(BaseSettings):
 
     # Dialogue settings (nested)
     llm: LLMSettings = LLMSettings(
-        model="qwen2.5:7b-instruct"
+        model="qwen3-vl:4b-instruct"
     )
 
     # UI settings (nested)

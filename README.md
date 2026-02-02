@@ -205,7 +205,7 @@ docker run -it --rm \
 | Whisper (small) | ~480MB | Speech-to-text |
 | Kokoro TTS | ~350MB | Text-to-speech |
 | Silero VAD | ~5MB | Voice activity detection |
-| qwen2.5:7b-instruct | ~4.5GB | LLM (via Ollama) |
+| qwen3-vl:4b-instruct | ~3.3GB | LLM (via Ollama) |
 
 ## Development Guidelines
 

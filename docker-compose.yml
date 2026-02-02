@@ -24,8 +24,8 @@ services:
     entrypoint: [ "/bin/sh", "-c" ]
     command:
       - |
-        echo "Pulling qwen2.5:7b-instruct model..."
-        ollama pull qwen2.5:7b-instruct
+        echo "Pulling qwen3-vl:4b-instruct model..."
+        ollama pull qwen3-vl:4b-instruct
         echo "Model ready!"
     environment:
       - OLLAMA_HOST=http://ollama:11434
