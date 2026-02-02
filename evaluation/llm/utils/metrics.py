@@ -1,7 +1,6 @@
 """Metrics and comparison utilities."""
 
 from dataclasses import dataclass, field
-from typing import Any
 
 from evaluation.llm.utils.normalizers import normalize_value
 
@@ -14,23 +13,14 @@ def precision_recall_f1(tp: int, fp: int, fn: int) -> tuple[float, float, float]
     return precision, recall, f1
 
 
-def args_match(
-    expected: dict, actual: dict, exact: bool = True
-) -> tuple[bool, list[str]]:
+def args_match(expected: dict, actual: dict, exact: bool = True) -> bool:
     """Check if expected and actual args match."""
     if exact and set(expected.keys()) != set(actual.keys()):
-        return False, list(set(expected.keys()) - set(actual.keys()))
-    mismatches = [
-        k
+        return False
+    return all(
+        normalize_value(v) == normalize_value(actual.get(k))
         for k, v in expected.items()
-        if normalize_value(v) != normalize_value(actual.get(k))
-    ]
-    return len(mismatches) == 0, mismatches
-
-
-def slot_pairs(args: dict) -> set[tuple[str, Any]]:
-    """Convert args to set of (key, normalized_value) pairs."""
-    return {(k, normalize_value(v)) for k, v in args.items()}
+    )
 
 
 @dataclass
