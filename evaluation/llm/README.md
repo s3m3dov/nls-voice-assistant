@@ -5,7 +5,7 @@ Evaluates Local LLM performance on tool selection (dialogue understanding) for t
 ## Prerequisites
 
 1. **Ollama** must be running (`ollama serve`).
-2. Models must be pulled locally (e.g., `ollama pull qwen2.5:7b-instruct`).
+2. Models must be pulled locally (e.g., `ollama pull qwen3-vl:4b-instruct`).
 3. Project dependencies installed via `uv`.
 
 ## Quick Start
@@ -28,10 +28,10 @@ uv run python -m evaluation.llm --default-models --quick
 uv run python -m evaluation.llm
 
 # Run on a specific model
-uv run python -m evaluation.llm --model qwen2.5:7b-instruct
+uv run python -m evaluation.llm --model qwen3-vl:4b-instruct
 
 # Run on multiple models
-uv run python -m evaluation.llm --models "qwen2.5:7b-instruct,llama3.1:8b"
+uv run python -m evaluation.llm --models "qwen2.5:7b-instruct,qwen3-vl:4b-instruct"
 
 # Run on ALL default models (skips models not installed locally)
 uv run python -m evaluation.llm --default-models
