@@ -13,10 +13,12 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+    networks:
+      - nls-network
 
   # Model initialization - pulls required LLM model
   ollama-init:
-    image: ollama/ollama:latest
+    image: curlimages/curl:latest
     container_name: nls-ollama-init
     depends_on:
       ollama:
@@ -25,10 +27,11 @@ services:
     command:
       - |
         echo "Pulling qwen3-vl:4b-instruct model..."
-        ollama pull qwen3-vl:4b-instruct
+        curl -X POST http://ollama:11434/api/pull -d '{"name": "qwen3-vl:4b-instruct"}'
+        echo ""
         echo "Model ready!"
-    environment:
-      - OLLAMA_HOST=http://ollama:11434
+    networks:
+      - nls-network
     restart: "no"
 
   # Voice Assistant application
@@ -49,7 +52,13 @@ services:
     command: ["python", "src/main.py", "--mode", "web"]
     stdin_open: true
     tty: true
+    networks:
+      - nls-network
     restart: unless-stopped
 
 volumes:
   ollama_data:
+
+networks:
+  nls-network:
+    driver: bridge
