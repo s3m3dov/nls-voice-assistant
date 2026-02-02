@@ -7,10 +7,11 @@ QWEN_MODELS = [
     "qwen2.5:7b",
     "qwen2.5:7b-instruct",
 
-    # Qwen 3 Vision-Language Series (acts slower)
+    # Qwen 3 Series
     "qwen3-vl:2b-instruct",
     "qwen3-vl:4b-instruct",
     "qwen3-vl:8b-instruct",
+    "qwen3:4b-instruct"
 ]
 
 META_MODELS = [
