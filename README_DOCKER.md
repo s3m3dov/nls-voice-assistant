@@ -1,6 +1,8 @@
 # NLS Voice Assistant
 
-This guide is for users who have received the pre-built Docker image (`nls-voice-assistant_backup.tar`).
+This version of NLS Voice Assistant runs Gradio Web UI in order to 
+work around docker audio access.
+It passes the audio from the browser to the back-end, and then streams back to the browser.
 
 ## Prerequisites
 
