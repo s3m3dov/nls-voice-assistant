@@ -160,10 +160,6 @@ No failures.
 - **calendar_list_by_date**: no_tool_called (tool=`None`)
 - **calendar_delete_by_date**: no_tool_called (tool=`None`)
 
-### smollm2:1.7b
-
-No failures.
-
 ### hermes3:8b
 
 - **calendar_create_dentist**: no_tool_called (tool=`None`)
