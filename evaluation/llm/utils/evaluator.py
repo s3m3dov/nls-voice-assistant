@@ -1,11 +1,10 @@
 """Test case evaluator for dialogue and E2E modes."""
 
 from dataclasses import dataclass, field
-from typing import Any
 
 from evaluation.llm.utils.validators import validate_output, ValidationResult
-from evaluation.llm.utils.metrics import BenchmarkMetrics, args_match, slot_pairs
-from evaluation.llm.utils.normalizers import normalize_args
+from evaluation.llm.utils.metrics import BenchmarkMetrics, args_match
+from evaluation.llm.utils.normalizers import normalize_args, normalize_value
 from src.api.calendar.client import CalendarClient
 from src.llm.chat import build_system_prompt, chat_stream
 
@@ -123,13 +122,11 @@ class CaseEvaluator:
     ):
         args_ok = True
         if case.expected_args:
-            ok, _ = args_match(case.expected_args, actual, exact=True)
-            if not ok:
+            if not args_match(case.expected_args, actual, exact=True):
                 args_ok = False
                 result.reason = "wrong_args"
         if case.expected_args_contains:
-            ok, _ = args_match(case.expected_args_contains, actual, exact=False)
-            if not ok:
+            if not args_match(case.expected_args_contains, actual, exact=False):
                 args_ok = False
                 result.reason = "wrong_args"
         if args_ok:
@@ -138,7 +135,8 @@ class CaseEvaluator:
 
         expected = {**case.expected_args, **case.expected_args_contains}
         if expected:
-            gold, pred = slot_pairs(expected), slot_pairs(actual)
+            gold = {(k, normalize_value(v)) for k, v in expected.items()}
+            pred = {(k, normalize_value(v)) for k, v in actual.items()}
             metrics.slot_tp += len(gold & pred)
             metrics.slot_fp += len(pred - gold)
             metrics.slot_fn += len(gold - pred)
