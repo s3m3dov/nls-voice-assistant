@@ -1,6 +1,7 @@
 QWEN_MODELS = [
     # Qwen 2.5 Series
     "qwen2.5:1.5b",
+    "qwen2.5:1.5b-instruct",
     "qwen2.5:3b",
     "qwen2.5:3b-instruct",
     "qwen2.5:7b",
