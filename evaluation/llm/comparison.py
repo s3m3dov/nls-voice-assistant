@@ -2,8 +2,8 @@
 
 from ollama import chat
 
-from evaluation.llm.utils import ReportGenerator, DEFAULT_MODELS
 from evaluation.llm.benchmark import BenchmarkRunner
+from evaluation.llm.utils import ReportGenerator
 from src.config import settings
 from src.llm.tools import TOOLS
 
@@ -70,7 +70,7 @@ class ModelComparison:
 
         if mode in ("all", "e2e") and e2e_path:
             self.e2e_results[model] = runner.run_e2e(e2e_path)
-            e = self.e2e_results[model]
+            e2e_res = self.e2e_results[model]
             print(
-                f"E2E: {e['accuracy']:.1f}% | Tool: {e['tool_accuracy']:.1f}% | Task: {e['task_success_rate']:.1f}%"
+                f"E2E: {e2e_res['accuracy']:.1f}% | Tool: {e2e_res['tool_accuracy']:.1f}% | Task: {e2e_res['task_success_rate']:.1f}%"
             )

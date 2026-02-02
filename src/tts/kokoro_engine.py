@@ -63,8 +63,13 @@ class KokoroTTS:
 
 if __name__ == "__main__":
     from src.logger import setup_logging
+    from src.config import settings
 
     setup_logging()
-    tts = KokoroTTS()
+    tts = KokoroTTS(
+        model_path=settings.tts.model_path,
+        voices_path=settings.tts.voices_path,
+        voice=settings.tts.voice,
+    )
     tts.speak("Hello! This is a test of the Kokoro text to speech system.", "audio.wav")
     logger.info("Created audio.wav")

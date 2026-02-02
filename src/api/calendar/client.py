@@ -127,8 +127,8 @@ class CalendarClient:
             if data is None:
                 return None
             if isinstance(data, dict):
-                event = CalendarEventResponse.model_validate(data)
-                return event if event.id is not None else None
+                created_event = CalendarEventResponse.model_validate(data)
+                return created_event if created_event.id is not None else None
             return None
         except requests.exceptions.RequestException as e:
             raise CalendarAPIError(f"Request failed: {e}") from e

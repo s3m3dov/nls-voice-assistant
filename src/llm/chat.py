@@ -1,6 +1,6 @@
 """Chat module with Ollama streaming and tool calling support."""
 from datetime import datetime, timedelta
-from typing import Generator
+from typing import Generator, Callable, cast
 
 from ollama import chat
 
@@ -74,7 +74,8 @@ def _execute_tool(tool_name: str, tool_args: dict) -> str:
     if tool_name not in TOOL_REGISTRY:
         return f"Unknown tool: {tool_name}"
     try:
-        return TOOL_REGISTRY[tool_name](**tool_args)
+        func = cast(Callable[..., str], TOOL_REGISTRY[tool_name])
+        return func(**tool_args)
     except Exception as e:
         return f"Error executing {tool_name}: {e}"
 
@@ -107,7 +108,7 @@ def chat_stream(user_input: str, messages: list) -> Generator[str, None, None]:
         tool_calls = []
 
         # Stream response
-        for chunk in chat(model=settings.llm.model, messages=messages, tools=TOOLS, stream=True):
+        for chunk in chat(model=settings.llm.model, messages=messages, tools=TOOLS, stream=True):  # type: ignore
             if chunk.message.content:
                 full_content += chunk.message.content
                 yield chunk.message.content
