@@ -8,7 +8,6 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from evaluation.llm.benchmark import BenchmarkRunner
 from evaluation.llm.comparison import ModelComparison
 from evaluation.llm.test_cases import Category, TestCasesManager
 from evaluation.llm.utils import DEFAULT_MODELS
@@ -68,42 +67,30 @@ def main():
     # Parse categories
     categories = parse_categories(args.categories) if args.categories else None
 
-    # Multi-model comparison
-    if args.models or args.default_models or args.output:
-        models = (
-            DEFAULT_MODELS
-            if args.default_models
-            else (
-                [m.strip() for m in args.models.split(",")]
-                if args.models
-                else [settings.llm.model]
-            )
-        )
-        suffix = "_quick" if args.quick else ""
-        default_filename = f"benchmark{suffix}_report.md"
-        output = args.output or str(
-            Path(__file__).parent / "results" / default_filename
-        )
-        ModelComparison(models).run(
-            quick=args.quick,
-            categories=categories,
-            output_path=output,
-        )
+    # Determine models to test
+    if args.default_models:
+        models = DEFAULT_MODELS
+    elif args.models:
+        models = [m.strip() for m in args.models.split(",")]
+    elif args.model:
+        models = [args.model]
     else:
-        # Single model run
-        if args.model:
-            settings.llm.model = args.model
-        print(f"Model: {settings.llm.model}\n")
+        models = [settings.llm.model]
 
-        runner = BenchmarkRunner(verbose=not args.quiet)
-        result = runner.run(quick=args.quick, categories=categories)
+    # Determine output path
+    suffix = "_quick" if args.quick else ""
+    default_filename = f"benchmark{suffix}_report.md"
+    output_path = args.output or str(
+        Path(__file__).parent / "results" / default_filename
+    )
 
-        if args.quiet:
-            print(
-                f"Accuracy: {result['accuracy']:.1f}% | "
-                f"Tool: {result['tool_accuracy']:.1f}% | "
-                f"F1: {result['slot_f1']:.3f}"
-            )
+    # Run comparison (works for single or multiple models)
+    ModelComparison(models).run(
+        quick=args.quick,
+        categories=categories,
+        output_path=output_path,
+        quiet=args.quiet,
+    )
 
 
 if __name__ == "__main__":

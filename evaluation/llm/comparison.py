@@ -22,6 +22,7 @@ class ModelComparison:
         quick: bool = False,
         categories: list[Category] | None = None,
         output_path: str | None = None,
+        quiet: bool = False,
     ) -> tuple[dict, dict]:
         """Run comparison across all models.
 
@@ -29,12 +30,13 @@ class ModelComparison:
             quick: If True, use one test case per category.
             categories: Optional list of categories to filter by.
             output_path: Path to save markdown report.
+            quiet: If True, suppress verbose output.
 
         Returns:
             Tuple of (results dict, skipped dict).
         """
         for model in self.models:
-            self._run_model(model, quick, categories)
+            self._run_model(model, quick, categories, quiet)
 
         if output_path:
             ReportGenerator(
@@ -51,6 +53,7 @@ class ModelComparison:
         model: str,
         quick: bool,
         categories: list[Category] | None,
+        quiet: bool = False,
     ):
         """Run benchmark for a single model."""
         print(f"\n{'=' * 60}\nModel: {model}\n{'=' * 60}")
@@ -69,7 +72,7 @@ class ModelComparison:
             self.skipped[model] = str(e)
             return
 
-        runner = BenchmarkRunner(verbose=False)
+        runner = BenchmarkRunner(verbose=not quiet)
         self.results[model] = runner.run(quick=quick, categories=categories)
 
         r = self.results[model]
