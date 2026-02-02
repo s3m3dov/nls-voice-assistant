@@ -52,8 +52,12 @@ def validate_output(tool_name: str, output: str, expected: dict) -> ValidationRe
         "get_weather_for_day": _validate_weather_day,
         "get_weather_for_today": _validate_weather_day,
         "list_calendar_events": _validate_calendar_list,
+        "get_calendar_events_for_date": _validate_calendar_list,
+        "get_calendar_event": _validate_calendar_event,
         "create_calendar_event": _validate_calendar_event,
         "update_calendar_event": _validate_calendar_event,
+        "delete_calendar_events_for_date": _validate_calendar_bulk_delete,
+        "delete_all_calendar_events": _validate_calendar_bulk_delete,
     }
 
     validator = validators.get(tool_name)
@@ -103,3 +107,9 @@ def _validate_calendar_event(data: dict, expected: dict) -> ValidationResult:
         return ValidationResult(True, event_id=resp.id)
     except ValidationError as e:
         return ValidationResult(False, f"Validation: {e.errors()[0]['msg']}")
+
+
+def _validate_calendar_bulk_delete(data: dict, expected: dict) -> ValidationResult:
+    if "deleted" not in data or "total_found" not in data:
+        return ValidationResult(False, "Invalid bulk delete response")
+    return ValidationResult(True)
