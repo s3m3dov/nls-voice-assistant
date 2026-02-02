@@ -1,7 +1,7 @@
 # NLS Voice Assistant
 
 This version of NLS Voice Assistant runs Gradio Web UI in order to 
-work around docker audio access.
+work around docker audio access (the gigalink version runs on CLI).
 It passes the audio from the browser to the back-end, and then streams back to the browser.
 
 ## Prerequisites
@@ -25,7 +25,7 @@ Verify the Image:
 docker images | grep -E "nls-voice-assistant|ollama"
 ```
 
-You should see `nls-voice-assistant:backup` in the list.
+You should see the nls-voice-assistant related containers in the list.
 
 ### Step 2: Create a Docker network
 
