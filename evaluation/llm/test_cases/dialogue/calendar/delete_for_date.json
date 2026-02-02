@@ -1,0 +1,10 @@
+[
+  {
+    "id": "calendar_delete_by_date",
+    "input": "Clear all my appointments for 2025-06-01.",
+    "expected_tool": "delete_calendar_events_for_date",
+    "expected_args": {
+      "date": "2025-06-01"
+    }
+  }
+]

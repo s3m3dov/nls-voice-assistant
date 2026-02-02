@@ -1,0 +1,76 @@
+[
+  {
+    "id": "calendar_update_time",
+    "input": "Reschedule event 12 to next Monday at 3 PM.",
+    "expected_tool": "update_calendar_event",
+    "expected_args_contains": {
+      "event_id": 12
+    }
+  },
+  {
+    "id": "calendar_update_title",
+    "input": "Rename event 25 to Project Review.",
+    "expected_tool": "update_calendar_event",
+    "expected_args_contains": {
+      "event_id": 25,
+      "title": "Project Review"
+    }
+  },
+  {
+    "id": "calendar_update_location",
+    "input": "Move event 8 to the main conference room.",
+    "expected_tool": "update_calendar_event",
+    "expected_args_contains": {
+      "event_id": 8
+    }
+  },
+  {
+    "id": "calendar_update_reschedule",
+    "input": "Change the time of appointment 33 to 4:00 PM.",
+    "expected_tool": "update_calendar_event",
+    "expected_args_contains": {
+      "event_id": 33
+    }
+  },
+  {
+    "id": "calendar_update_postpone",
+    "input": "Postpone event 17 to Friday.",
+    "expected_tool": "update_calendar_event",
+    "expected_args_contains": {
+      "event_id": 17
+    }
+  },
+  {
+    "id": "calendar_update_push_back",
+    "input": "Push back meeting 50 by one hour.",
+    "expected_tool": "update_calendar_event",
+    "expected_args_contains": {
+      "event_id": 50
+    }
+  },
+  {
+    "id": "calendar_update_description",
+    "input": "Update event 22 with the note: bring laptop.",
+    "expected_tool": "update_calendar_event",
+    "expected_args_contains": {
+      "event_id": 22
+    }
+  },
+  {
+    "id": "calendar_update_multiple_fields",
+    "input": "Change event 15 to start at 4 PM and rename it to Team Standup.",
+    "expected_tool": "update_calendar_event",
+    "expected_args_contains": {
+      "event_id": 15,
+      "title": "Team Standup"
+    }
+  },
+  {
+    "id": "calendar_update_cancel_and_reschedule",
+    "input": "Move my 3 PM meeting (event 44) to 5 PM.",
+    "expected_tool": "update_calendar_event",
+    "expected_args_contains": {
+      "event_id": 44
+    }
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "weather_today_berlin",
+    "input": "How is the weather today in Berlin?",
+    "expected_tool": "get_weather_for_today",
+    "expected_args": {
+      "place": "Berlin"
+    }
+  },
+  {
+    "id": "weather_today_cologne",
+    "input": "Weather today in Cologne.",
+    "expected_tool": "get_weather_for_today",
+    "expected_args": {
+      "place": "Cologne"
+    }
+  },
+  {
+    "id": "weather_today_stuttgart",
+    "input": "What's the weather right now in Stuttgart?",
+    "expected_tool": "get_weather_for_today",
+    "expected_args": {
+      "place": "Stuttgart"
+    }
+  },
+  {
+    "id": "weather_today_dusseldorf",
+    "input": "Tell me today's weather in Dusseldorf.",
+    "expected_tool": "get_weather_for_today",
+    "expected_args": {
+      "place": "Dusseldorf"
+    }
+  },
+  {
+    "id": "weather_today_informal",
+    "input": "Is it raining in Leipzig right now?",
+    "expected_tool": "get_weather_for_today",
+    "expected_args": {
+      "place": "Leipzig"
+    }
+  },
+  {
+    "id": "weather_today_temperature",
+    "input": "How hot is it in Madrid today?",
+    "expected_tool": "get_weather_for_today",
+    "expected_args": {
+      "place": "Madrid"
+    }
+  },
+  {
+    "id": "weather_today_jacket",
+    "input": "Do I need a jacket in Dresden today?",
+    "expected_tool": "get_weather_for_today",
+    "expected_args": {
+      "place": "Dresden"
+    }
+  },
+  {
+    "id": "weather_today_current",
+    "input": "What are the current conditions in Frankfurt?",
+    "expected_tool": "get_weather_for_today",
+    "expected_args": {
+      "place": "Frankfurt"
+    }
+  },
+  {
+    "id": "weather_typo_recovery",
+    "input": "Waht is the weather in Berln today?",
+    "expected_tool": "get_weather_for_today",
+    "expected_args_contains": {
+      "place": "Berlin"
+    }
+  },
+  {
+    "id": "weather_specific_hour_today",
+    "input": "Will it rain in Cologne at 3 PM today?",
+    "expected_tool": "get_weather_for_today",
+    "expected_args": {
+      "place": "Cologne"
+    }
+  }
+]
