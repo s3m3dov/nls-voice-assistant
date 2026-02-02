@@ -171,8 +171,16 @@ class AudioStreamHandler:
         elif state == StreamState.LISTENING:
             yield history, StatusIcon.LISTENING.value, None
         elif state == StreamState.FINISHED and full_audio is not None:
-            yield from self._process_utterance(full_audio, history)
-            self.vad_processor.reset()
+            try:
+                for item in self._process_utterance(full_audio, history):
+                    yield item
+            except GeneratorExit:
+                # Handle generator cleanup gracefully
+                logger.debug("Generator closed during stream processing")
+                self.is_processing = False
+                raise
+            finally:
+                self.vad_processor.reset()
 
     def _normalize_audio(self, audio_data: np.ndarray) -> np.ndarray:
         """Normalize audio to float32 mono."""
@@ -193,9 +201,10 @@ class AudioStreamHandler:
     ) -> Generator[tuple[list, str, tuple[int, np.ndarray] | None], None, None]:
         """Process a complete user utterance: ASR -> LLM -> TTS."""
         self.is_processing = True
-        yield history, StatusIcon.THINKING.value, None
 
         try:
+            yield history, StatusIcon.THINKING.value, None
+
             user_text = self.assistant.transcribe_audio(audio_tensor)
 
             if not user_text.strip():
@@ -204,15 +213,18 @@ class AudioStreamHandler:
             history.append([user_text, None])
             yield history, StatusIcon.THINKING.value, None
 
-            yield from self._stream_response(user_text, history)
+            for item in self._stream_response(user_text, history):
+                yield item
 
+        except GeneratorExit:
+            # Handle generator cleanup gracefully
+            logger.debug("Generator closed during utterance processing")
+            raise
         except Exception as e:
             logger.error(f"Processing error: {e}")
             yield history, StatusIcon.ERROR.value, None
-
         finally:
             self.is_processing = False
-            yield history, StatusIcon.WAITING.value, None
 
     def _stream_response(
         self,
