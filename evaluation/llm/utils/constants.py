@@ -30,13 +30,10 @@ MICROSOFT_MODELS = ["phi3.5"]
 
 IBM_MODELS = ["granite3-dense:2b"]
 
-HUGGINGFACE_MODELS = ["smollm2:1.7b"]
-
 NOUS_MODELS = ["hermes3:8b"]
 
-COHERE_MODELS = ["command-r7b", "aya:8b"]
+COHERE_MODELS = ["command-r7b"]
 
-TII_MODELS = ["falcon3:1b", "falcon3:7b"]
 
 # =================================================================
 # All Models Combined
@@ -48,8 +45,6 @@ DEFAULT_MODELS = (
         GOOGLE_MODELS +
         MICROSOFT_MODELS +
         IBM_MODELS +
-        HUGGINGFACE_MODELS +
         NOUS_MODELS +
-        COHERE_MODELS +
-        TII_MODELS
+        COHERE_MODELS
 )
