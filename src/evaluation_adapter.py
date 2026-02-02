@@ -37,7 +37,9 @@ def _extract_tool_call(tool_call: Any) -> tuple[str, dict]:
     return name, args
 
 
-def _build_calendar_api_call(tool_name: str, args: dict) -> tuple[str, str, dict, dict, dict]:
+def _build_calendar_api_call(
+    tool_name: str, args: dict
+) -> tuple[str, str, dict, dict, dict]:
     method = ""
     params = {"calenderid": settings.api.calendar_id}
     body: dict[str, Any] = {}
@@ -80,7 +82,7 @@ def _build_calendar_api_call(tool_name: str, args: dict) -> tuple[str, str, dict
     return CALENDAR_TOOL_INTENTS.get(tool_name, ""), method, slots, params, body
 
 
-def _build_weather_api_call(tool_name: str, args: dict) -> tuple[str, dict, dict]:
+def _build_weather_api_call(tool_name: str, args: dict) -> tuple[dict, dict, dict]:
     slots = {}
     body = {}
     if "place" in args and args["place"] not in (None, ""):

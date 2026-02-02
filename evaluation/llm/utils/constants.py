@@ -1,0 +1,15 @@
+DEFAULT_MODELS = [
+    "qwen2.5:3b-instruct",
+    "qwen2.5:7b",
+    "qwen2.5:7b-instruct",
+    "qwen3-vl:2b-instruct",
+    "qwen3-vl:4b",
+    "qwen3-vl:4b-instruct",
+    "qwen3-vl:8b",
+    "qwen3-vl:8b-instruct",
+    "mistral:7b",
+    "mistral:7b-instruct",
+    "llama3.1:8b",
+    "llama3.2:3b",
+    "llama3.2:1b-instruct-q4_K_M",
+]
