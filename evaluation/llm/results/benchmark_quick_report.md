@@ -19,7 +19,6 @@
 - `mistral:7b-instruct`
 - `mistral-nemo:12b`
 - `granite3-dense:2b`
-- `smollm2:1.7b`
 - `hermes3:8b`
 - `command-r7b`
 
@@ -42,7 +41,6 @@
 | mistral:7b-instruct | 8.3% | 0.0% | 0.000 | 1/12 |
 | mistral-nemo:12b | 91.7% | 90.9% | 0.818 | 11/12 |
 | granite3-dense:2b | 8.3% | 0.0% | 0.000 | 1/12 |
-| smollm2:1.7b | 0.0% | 0.0% | 0.000 | 0/12 |
 | hermes3:8b | 75.0% | 72.7% | 1.000 | 9/12 |
 | command-r7b | 8.3% | 0.0% | 0.000 | 1/12 |
 
