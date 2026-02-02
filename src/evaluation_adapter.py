@@ -4,10 +4,9 @@ from __future__ import annotations
 
 from typing import Any
 
-from ollama import chat
-
 from src.config import settings
 from src.llm.chat import build_system_prompt
+from src.llm.client import client
 from src.llm.tools import TOOLS
 
 
@@ -119,7 +118,7 @@ def assistant_step(history: list[dict], user_text: str) -> dict:
 
     messages.append({"role": "user", "content": user_text})
 
-    response = chat(
+    response = client.chat(
         model=settings.llm.model,
         messages=messages,
         tools=TOOLS,  # type: ignore
