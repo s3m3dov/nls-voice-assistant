@@ -2,6 +2,11 @@
  * Voice Assistant UI Styles
  */
 
+/* Hide Gradio loading indicators */
+.svelte-1gpwetz {
+    display: none !important;
+}
+
 /* Chatbot styling - reset border */
 .chatbot {
     border: none !important;

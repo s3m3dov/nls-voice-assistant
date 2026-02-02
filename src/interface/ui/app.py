@@ -9,31 +9,24 @@ from enum import Enum
 from pathlib import Path
 from typing import Generator
 
-import gradio as gr
 import numpy as np
 import torch
 
-from src.assistant import VoiceAssistant
-from src.asr.stream import StreamState, VADStreamProcessor
-from src.interface.ui.config import UISettings
-from src.logger import logger, setup_logging
-
-# Disable Gradio analytics/telemetry
+# Disable Gradio analytics/telemetry - must be before import
 os.environ["GRADIO_ANALYTICS_ENABLED"] = "False"
+
+import gradio as gr  # noqa: E402
+
+from src.assistant import VoiceAssistant  # noqa: E402
+from src.asr.stream import StreamState, VADStreamProcessor  # noqa: E402
+from src.interface.ui.config import UISettings  # noqa: E402
+from src.logger import logger, setup_logging  # noqa: E402
 
 # Directory containing static assets
 STATIC_DIR = Path(__file__).parent / "static"
 
 # Regex to split text on sentence boundaries
 SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+")
-
-
-# Monkey-patch to fix Gradio's JSON schema parsing bug
-def _patched_get_api_info(self):
-    return {"named_endpoints": {}, "unnamed_endpoints": {}}
-
-
-gr.Blocks.get_api_info = _patched_get_api_info
 
 
 # =============================================================================
@@ -330,12 +323,14 @@ class VoiceAssistantApp:
                 fn=self._process_audio_stream,
                 inputs=[audio_input, chatbot, audio_chunks_state],
                 outputs=[chatbot, status_label, audio_data, audio_chunks_state],
-                show_progress=False,
+                show_progress="hidden",
+                api_name=False,
             )
 
             clear_btn.click(
                 fn=self._clear_conversation,
                 outputs=[chatbot, audio_data],
+                api_name=False,
             )
 
         return demo

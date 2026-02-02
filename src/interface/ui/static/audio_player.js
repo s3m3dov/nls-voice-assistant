@@ -8,6 +8,15 @@
 (function() {
     'use strict';
 
+    // Suppress Gradio's "Too many arguments" warning
+    const originalWarn = console.warn;
+    console.warn = function(...args) {
+        if (args[0] && args[0].includes && args[0].includes('Too many arguments')) {
+            return; // Suppress this specific warning
+        }
+        originalWarn.apply(console, args);
+    };
+
     // Audio queue for sequential playback
     const audioQueue = [];
     let isPlaying = false;
