@@ -1,0 +1,10 @@
+[
+  {
+    "id": "calendar_list_by_date",
+    "input": "What do I have planned for 2025-05-15?",
+    "expected_tool": "get_calendar_events_for_date",
+    "expected_args": {
+      "date": "2025-05-15"
+    }
+  }
+]

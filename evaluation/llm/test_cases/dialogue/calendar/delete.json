@@ -1,0 +1,58 @@
+[
+  {
+    "id": "calendar_delete_5",
+    "input": "Delete the event with ID 5.",
+    "expected_tool": "delete_calendar_event",
+    "expected_args": {
+      "event_id": 5
+    }
+  },
+  {
+    "id": "calendar_delete_42",
+    "input": "Remove calendar event 42.",
+    "expected_tool": "delete_calendar_event",
+    "expected_args": {
+      "event_id": 42
+    }
+  },
+  {
+    "id": "calendar_delete_cancel",
+    "input": "Cancel my appointment number 18.",
+    "expected_tool": "delete_calendar_event",
+    "expected_args": {
+      "event_id": 18
+    }
+  },
+  {
+    "id": "calendar_delete_event_77",
+    "input": "Get rid of event 77.",
+    "expected_tool": "delete_calendar_event",
+    "expected_args": {
+      "event_id": 77
+    }
+  },
+  {
+    "id": "calendar_delete_erase",
+    "input": "Erase event ID 100 from my calendar.",
+    "expected_tool": "delete_calendar_event",
+    "expected_args": {
+      "event_id": 100
+    }
+  },
+  {
+    "id": "calendar_delete_remove",
+    "input": "Remove meeting 55 from my schedule.",
+    "expected_tool": "delete_calendar_event",
+    "expected_args": {
+      "event_id": 55
+    }
+  },
+  {
+    "id": "calendar_delete_by_description",
+    "input": "Delete event number 200.",
+    "expected_tool": "delete_calendar_event",
+    "expected_args": {
+      "event_id": 200
+    }
+  }
+]

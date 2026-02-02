@@ -1,0 +1,82 @@
+[
+  {
+    "id": "weather_forecast_marburg",
+    "input": "Get me the 7-day weather forecast for Marburg.",
+    "expected_tool": "get_weather_forecast",
+    "expected_args": {
+      "place": "Marburg"
+    }
+  },
+  {
+    "id": "weather_forecast_paris",
+    "input": "What's the 7-day forecast for Paris?",
+    "expected_tool": "get_weather_forecast",
+    "expected_args": {
+      "place": "Paris"
+    }
+  },
+  {
+    "id": "weather_forecast_new_york",
+    "input": "Show me the weekly weather for New York City.",
+    "expected_tool": "get_weather_forecast",
+    "expected_args_contains": {
+      "place": "New York"
+    }
+  },
+  {
+    "id": "weather_forecast_london",
+    "input": "I need to know the weather forecast for London this week.",
+    "expected_tool_one_of": ["get_weather_forecast", "get_weather_for_today"],
+    "expected_args": {
+      "place": "London"
+    }
+  },
+  {
+    "id": "weather_forecast_tokyo",
+    "input": "Can you get the forecast for Tokyo?",
+    "expected_tool": "get_weather_forecast",
+    "expected_args": {
+      "place": "Tokyo"
+    }
+  },
+  {
+    "id": "weather_forecast_informal",
+    "input": "Whats the weather gonna be like in Seattle for the next 7 days?",
+    "expected_tool": "get_weather_forecast",
+    "expected_args": {
+      "place": "Seattle"
+    }
+  },
+  {
+    "id": "weather_forecast_planning",
+    "input": "I'm planning a trip to Barcelona, what's the weather looking like?",
+    "expected_tool": "get_weather_forecast",
+    "expected_args": {
+      "place": "Barcelona"
+    }
+  },
+  {
+    "id": "weather_compound_city_name",
+    "input": "What's the forecast for San Francisco?",
+    "expected_tool": "get_weather_forecast",
+    "expected_args_contains": {
+      "place": "San Francisco"
+    }
+  },
+  {
+    "id": "weather_implicit_forecast",
+    "input": "I need weather info for Brussels.",
+    "expected_tool_one_of": ["get_weather_forecast", "get_weather_for_today"],
+    "expected_args": {
+      "place": "Brussels"
+    }
+  },
+  {
+    "id": "weather_multiple_cities_first",
+    "input": "How's the weather in Berlin and Munich?",
+    "expected_tool_one_of": ["get_weather_forecast", "get_weather_for_today"],
+    "expected_args_contains": {
+      "place": "Berlin"
+    }
+  }
+]

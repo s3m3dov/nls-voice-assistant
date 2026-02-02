@@ -1,0 +1,146 @@
+[
+  {
+    "id": "calendar_create_dentist",
+    "input": "Add a Dentist Appointment to my calendar for tomorrow at 10:00 AM.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "Dentist Appointment"
+    }
+  },
+  {
+    "id": "calendar_create_team_sync",
+    "input": "Book a team sync tomorrow at 2 PM in the Berlin office.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "team sync"
+    }
+  },
+  {
+    "id": "calendar_create_meeting",
+    "input": "Schedule a meeting with John for Monday at 3 PM.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "meeting with John"
+    }
+  },
+  {
+    "id": "calendar_create_lunch",
+    "input": "Create a lunch appointment with Sarah on Friday at 12:30 PM.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "lunch"
+    }
+  },
+  {
+    "id": "calendar_create_doctor",
+    "input": "Add a doctor's appointment for next Tuesday at 9 AM.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "doctor"
+    }
+  },
+  {
+    "id": "calendar_create_call",
+    "input": "Set up a call with the marketing team on Wednesday at 11:00.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "call"
+    }
+  },
+  {
+    "id": "calendar_create_interview",
+    "input": "Book an interview with candidate Alex on Thursday at 2:30 PM.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "interview"
+    }
+  },
+  {
+    "id": "calendar_create_presentation",
+    "input": "Schedule a presentation review for Friday at 4 PM in conference room B.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "presentation"
+    }
+  },
+  {
+    "id": "calendar_create_gym",
+    "input": "Add gym session to my calendar for tomorrow at 6 PM.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "gym"
+    }
+  },
+  {
+    "id": "calendar_create_reminder",
+    "input": "Create a reminder to call mom on Sunday at 5 PM.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "call mom"
+    }
+  },
+  {
+    "id": "calendar_create_with_location",
+    "input": "Schedule a meeting at Starbucks tomorrow at 3 PM.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "location": "Starbucks"
+    }
+  },
+  {
+    "id": "calendar_create_with_description",
+    "input": "Add a dentist appointment tomorrow at 9 AM and note that I need to bring my insurance card.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "dentist"
+    }
+  },
+  {
+    "id": "calendar_vague_meeting",
+    "input": "Set up a quick 30-minute standup for tomorrow morning.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "standup"
+    }
+  },
+  {
+    "id": "calendar_natural_language_time",
+    "input": "Add a coffee break at quarter past three tomorrow.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "coffee"
+    }
+  },
+  {
+    "id": "calendar_create_all_day",
+    "input": "Block off next Monday for a project deadline.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "project deadline"
+    }
+  },
+  {
+    "id": "calendar_urgent_reminder",
+    "input": "Remind me to submit the report by 5 PM today.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "submit the report"
+    }
+  },
+  {
+    "id": "calendar_create_recurring_style",
+    "input": "Add a weekly team meeting every Monday at 10 AM.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "team meeting"
+    }
+  },
+  {
+    "id": "calendar_create_birthday",
+    "input": "Add Mom's birthday party on Saturday at 6 PM at my house.",
+    "expected_tool": "create_calendar_event",
+    "expected_args_contains": {
+      "title": "birthday"
+    }
+  }
+]

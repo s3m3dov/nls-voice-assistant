@@ -1,0 +1,26 @@
+[
+  {
+    "id": "calendar_delete_all_events",
+    "input": "Delete all my calendar events.",
+    "expected_tool": "delete_all_calendar_events",
+    "expected_args": {}
+  },
+  {
+    "id": "calendar_delete_all_clear",
+    "input": "Clear my entire calendar.",
+    "expected_tool": "delete_all_calendar_events",
+    "expected_args": {}
+  },
+  {
+    "id": "calendar_delete_all_wipe",
+    "input": "Wipe all events from my schedule.",
+    "expected_tool": "delete_all_calendar_events",
+    "expected_args": {}
+  },
+  {
+    "id": "calendar_delete_all_remove_everything",
+    "input": "Remove all appointments from my calendar.",
+    "expected_tool": "delete_all_calendar_events",
+    "expected_args": {}
+  }
+]

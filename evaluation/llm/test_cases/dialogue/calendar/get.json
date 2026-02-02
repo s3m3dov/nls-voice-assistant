@@ -1,0 +1,50 @@
+[
+  {
+    "id": "calendar_get_event_7",
+    "input": "What's on event 7?",
+    "expected_tool": "get_calendar_event",
+    "expected_args": {
+      "event_id": 7
+    }
+  },
+  {
+    "id": "calendar_get_event_123",
+    "input": "Show me the details of event 123.",
+    "expected_tool": "get_calendar_event",
+    "expected_args": {
+      "event_id": 123
+    }
+  },
+  {
+    "id": "calendar_get_event_info",
+    "input": "Give me information about appointment number 45.",
+    "expected_tool": "get_calendar_event",
+    "expected_args": {
+      "event_id": 45
+    }
+  },
+  {
+    "id": "calendar_get_event_id_15",
+    "input": "What is event ID 15?",
+    "expected_tool": "get_calendar_event",
+    "expected_args": {
+      "event_id": 15
+    }
+  },
+  {
+    "id": "calendar_get_event_details",
+    "input": "Tell me about event 99.",
+    "expected_tool": "get_calendar_event",
+    "expected_args": {
+      "event_id": 99
+    }
+  },
+  {
+    "id": "calendar_get_specific_time",
+    "input": "Show me details of appointment 88.",
+    "expected_tool": "get_calendar_event",
+    "expected_args": {
+      "event_id": 88
+    }
+  }
+]

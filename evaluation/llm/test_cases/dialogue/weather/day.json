@@ -1,0 +1,116 @@
+[
+  {
+    "id": "weather_day_friday_frankfurt",
+    "input": "Will it rain in Frankfurt on Friday?",
+    "expected_tool": "get_weather_for_day",
+    "expected_args": {
+      "place": "Frankfurt",
+      "day": "friday"
+    }
+  },
+  {
+    "id": "weather_day_sunday_munich",
+    "input": "Is it sunny in Munich on Sunday?",
+    "expected_tool": "get_weather_for_day",
+    "expected_args": {
+      "place": "Munich",
+      "day": "sunday"
+    }
+  },
+  {
+    "id": "weather_day_monday_berlin",
+    "input": "What's the weather like in Berlin on Monday?",
+    "expected_tool": "get_weather_for_day",
+    "expected_args": {
+      "place": "Berlin",
+      "day": "monday"
+    }
+  },
+  {
+    "id": "weather_day_tuesday_hamburg",
+    "input": "Tell me about the weather in Hamburg on Tuesday.",
+    "expected_tool": "get_weather_for_day",
+    "expected_args": {
+      "place": "Hamburg",
+      "day": "tuesday"
+    }
+  },
+  {
+    "id": "weather_day_wednesday_vienna",
+    "input": "How's the weather on Wednesday in Vienna?",
+    "expected_tool": "get_weather_for_day",
+    "expected_args": {
+      "place": "Vienna",
+      "day": "wednesday"
+    }
+  },
+  {
+    "id": "weather_day_thursday_zurich",
+    "input": "Check the weather for Zurich on Thursday.",
+    "expected_tool": "get_weather_for_day",
+    "expected_args": {
+      "place": "Zurich",
+      "day": "thursday"
+    }
+  },
+  {
+    "id": "weather_day_saturday_amsterdam",
+    "input": "Will it be cold in Amsterdam on Saturday?",
+    "expected_tool": "get_weather_for_day",
+    "expected_args": {
+      "place": "Amsterdam",
+      "day": "saturday"
+    }
+  },
+  {
+    "id": "weather_day_outdoor_activity",
+    "input": "Should I bring an umbrella to Prague on Friday?",
+    "expected_tool": "get_weather_for_day",
+    "expected_args": {
+      "place": "Prague",
+      "day": "friday"
+    }
+  },
+  {
+    "id": "weather_day_temperature",
+    "input": "What temperature will it be in Rome on Monday?",
+    "expected_tool": "get_weather_for_day",
+    "expected_args": {
+      "place": "Rome",
+      "day": "monday"
+    }
+  },
+  {
+    "id": "weather_ambiguous_tomorrow",
+    "input": "What will the weather be like tomorrow in Munich?",
+    "expected_tool": "get_weather_for_day",
+    "expected_args_contains": {
+      "place": "Munich"
+    }
+  },
+  {
+    "id": "weather_conversational",
+    "input": "I'm wondering if I should take an umbrella to Hamburg tomorrow.",
+    "expected_tool": "get_weather_for_day",
+    "expected_args_contains": {
+      "place": "Hamburg"
+    }
+  },
+  {
+    "id": "weather_weekend_plan",
+    "input": "Is Saturday going to be nice in Vienna?",
+    "expected_tool": "get_weather_for_day",
+    "expected_args": {
+      "place": "Vienna",
+      "day": "saturday"
+    }
+  },
+  {
+    "id": "weather_multiple_questions",
+    "input": "What's the temperature in Oslo and will it snow?",
+    "expected_tool_one_of": ["get_weather_forecast", "get_weather_for_today"],
+    "expected_args_contains": {
+      "place": "Oslo"
+    }
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "general_no_tool_greeting",
+    "input": "Hello, how are you?",
+    "expected_tool": null
+  },
+  {
+    "id": "general_no_tool_hobbit",
+    "input": "Who wrote The Hobbit?",
+    "expected_tool": null
+  },
+  {
+    "id": "general_no_tool_capital",
+    "input": "What is the capital of France?",
+    "expected_tool": null
+  },
+  {
+    "id": "general_no_tool_math",
+    "input": "What is 2 + 2?",
+    "expected_tool": null
+  },
+  {
+    "id": "general_no_tool_thanks",
+    "input": "Thank you for your help!",
+    "expected_tool": null
+  },
+  {
+    "id": "general_no_tool_joke",
+    "input": "Tell me a joke.",
+    "expected_tool": null
+  },
+  {
+    "id": "general_no_tool_definition",
+    "input": "What does the word 'serendipity' mean?",
+    "expected_tool": null
+  },
+  {
+    "id": "general_no_tool_history",
+    "input": "When did World War II end?",
+    "expected_tool": null
+  }
+]

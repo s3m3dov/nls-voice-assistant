@@ -1,0 +1,44 @@
+[
+  {
+    "id": "calendar_list_basic",
+    "input": "What do I have on my calendar?",
+    "expected_tool": "list_calendar_events",
+    "expected_args": {}
+  },
+  {
+    "id": "calendar_list_upcoming",
+    "input": "Show my upcoming appointments.",
+    "expected_tool": "list_calendar_events",
+    "expected_args": {}
+  },
+  {
+    "id": "calendar_list_all_events",
+    "input": "List all my calendar events.",
+    "expected_tool": "list_calendar_events",
+    "expected_args": {}
+  },
+  {
+    "id": "calendar_list_schedule",
+    "input": "What's on my schedule?",
+    "expected_tool": "list_calendar_events",
+    "expected_args": {}
+  },
+  {
+    "id": "calendar_list_meetings",
+    "input": "Show me all my meetings.",
+    "expected_tool": "list_calendar_events",
+    "expected_args": {}
+  },
+  {
+    "id": "calendar_list_busy",
+    "input": "Am I busy this week?",
+    "expected_tool": "list_calendar_events",
+    "expected_args": {}
+  },
+  {
+    "id": "calendar_list_planned",
+    "input": "What do I have planned?",
+    "expected_tool": "list_calendar_events",
+    "expected_args": {}
+  }
+]
