@@ -700,5 +700,21 @@
     "expected_args_contains": {
       "event_id": 44
     }
+  },
+  {
+    "id": "calendar_list_by_date",
+    "input": "What do I have planned for 2025-05-15?",
+    "expected_tool": "get_calendar_events_for_date",
+    "expected_args": {
+      "date": "2025-05-15"
+    }
+  },
+  {
+    "id": "calendar_delete_by_date",
+    "input": "Clear all my appointments for 2025-06-01.",
+    "expected_tool": "delete_calendar_events_for_date",
+    "expected_args": {
+      "date": "2025-06-01"
+    }
   }
 ]
