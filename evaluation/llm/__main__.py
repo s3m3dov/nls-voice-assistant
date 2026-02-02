@@ -53,7 +53,9 @@ def main():
                 else [settings.llm.model]
             )
         )
-        output = args.output or str(base.parent / "benchmark_report.md")
+        quick_suffix = "_quick" if args.quick else ""
+        default_filename = f"{args.mode}{quick_suffix}_report.md"
+        output = args.output or str(base.parent / "results" / default_filename)
         ModelComparison(models).run(dialogue, e2e, args.mode, output)
     else:
         if args.model:
